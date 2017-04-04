@@ -169,7 +169,7 @@ public class ChatActivity extends Activity {
 										//正常发送
 										if (str.contains("@")) {
 											 //提醒
-											 alertUser(str);
+											 str = alertUser(str);
 										}
 										str = MessageMethod.buildText(User, str);
 										pushText(false, str);
@@ -398,7 +398,7 @@ public class ChatActivity extends Activity {
 	 }
 
 	 //提醒用户
-	 private void alertUser(String str) {
+	 private String alertUser(String str) {
 		  Pattern pat = Pattern.compile("(\\@)(\\S+)");
 		  Matcher mat = pat.matcher(str);
 		  ArrayList<String> alert = new ArrayList<String>();
@@ -420,6 +420,7 @@ public class ChatActivity extends Activity {
 			   }
 		  }
 		  NetWorkClient.Send(alert, "NULL", Config.TYPE_ALERT_USER);
+		  return str;
 	 }
 
 	 //关闭Socket服务

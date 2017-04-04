@@ -6,7 +6,7 @@ public class Config
 	 
 	 public static String COLOR_SYSTEM = "#E53935";
 	 public static String COLOR_INFO = "#66BB6A";
-	 public static String COLOR_ALERTUSER = "#FF8C00";
+	 public static String COLOR_ALERTUSER = "#FF9800";
 	 public static String COLOR_SECRETCHAT = "#87CEFA";
 	 
 	 public static int TYPE_MSG = 1;

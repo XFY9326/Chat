@@ -50,7 +50,7 @@ public class MessageMethod extends Thread {
 
 	 //彩色文字构建
 	 public static String buildColorText(String text, String color) {
-		  String result = "<font color='" + color + "'>" + text + "</font>";
+		  String result = "<font color='" + color.trim().toString() + "'>" + text + "</font>";
 		  return result;
 	 }
 
