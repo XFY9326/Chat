@@ -4,12 +4,18 @@ public class Config
 {
 	 public static int NOTIFICATION_ID = 51030;
 	 
+	 public static String COLOR_SYSTEM = "#E53935";
+	 public static String COLOR_INFO = "#66BB6A";
+	 public static String COLOR_ALERTUSER = "#FF8C00";
+	 public static String COLOR_SECRETCHAT = "#87CEFA";
+	 
 	 public static int TYPE_MSG = 1;
 	 public static int TYPE_USERLIST = 2;
 	 public static int TYPE_ASK_USERLIST = 3;
 	 public static int TYPE_RELOAD_USERLIST = 4;
 	 public static int TYPE_ALERT_USER = 5;
 	 public static int TYPE_SECRET_CHAT = 6;
+	 
 	 public static String TAG_TITLE = "tool.xfy9326.chat";
 	 public static String MSG_TAG = "tool.xfy9326.chat.MSG_";
 	 public static String USERLIST_TAG= "tool.xfy9326.chat.USERLIST_";

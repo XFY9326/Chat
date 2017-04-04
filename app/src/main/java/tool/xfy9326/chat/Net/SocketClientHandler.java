@@ -26,8 +26,10 @@ public class SocketClientHandler {
 
 	 //多IP发送
 	 public void Send(ArrayList<String> IP, String text, int type) {
-		  for (String ip : IP) {
-			   executor.execute(new SocketClient(TagFix(text, type), ip, Port, PassWord));
+		  if (IP.size() > 0) {
+			   for (String ip : IP) {
+					executor.execute(new SocketClient(TagFix(text, type), ip, Port, PassWord));
+			   }
 		  }
 	 }
 

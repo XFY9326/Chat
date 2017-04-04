@@ -48,11 +48,20 @@ public class MessageMethod extends Thread {
 		  return result;
 	 }
 
-	 public static String buildSystemText(String text) {
-		  String result = "<font color='red'> #Server Message# [" + getMsgTime() + "]" + "\n" + text + "</font>";
+	 //彩色文字构建
+	 public static String buildColorText(String text, String color) {
+		  String result = "<font color='" + color + "'>" + text + "</font>";
 		  return result;
 	 }
 
+     //系统提示构建
+	 public static String buildSystemText(String text) {
+		  String result = "#Server Message# [" + getMsgTime() + "]" + "\n" + text;
+		  result = buildColorText(result, Config.COLOR_SYSTEM);
+		  return result;
+	 }
+
+	 //消息发送时间
 	 private static String getMsgTime() {
 		  SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		  String time = sdf.format(System.currentTimeMillis());
