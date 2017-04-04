@@ -155,30 +155,34 @@ public class ChatActivity extends Activity {
 					public void onClick(View v) {
                          String str = sendtext.getText().toString().trim();
 						 if (!str.isEmpty()) {
-							  if (str.startsWith("/")) {
-								   //命令
-								   CommandHandler(str.substring(1));
-							  } else {
-								   //信息
-								   if (secretChatMode) {
-										//私聊
-										str = MessageMethod.buildColorText(MessageMethod.buildText(User, str), Config.COLOR_SECRETCHAT);
-										pushText(false, str);
-										NetWorkClient.Send(secretChatUser, str, Config.TYPE_SECRET_CHAT);
+							  if (str.length() <= 500) {
+								   if (str.startsWith("/")) {
+										//命令
+										CommandHandler(str.substring(1));
 								   } else {
-										//正常发送
-										if (str.contains("@")) {
-											 //提醒
-											 str = alertUser(str);
+										//信息
+										if (secretChatMode) {
+											 //私聊
+											 str = MessageMethod.buildColorText(MessageMethod.buildText(User, str), Config.COLOR_SECRETCHAT);
+											 pushText(false, str);
+											 NetWorkClient.Send(secretChatUser, str, Config.TYPE_SECRET_CHAT);
+										} else {
+											 //正常发送
+											 if (str.contains("@")) {
+												  //提醒
+												  str = alertUser(str);
+											 }
+											 str = MessageMethod.buildText(User, str);
+											 pushText(false, str);
+											 msgSend(str);
 										}
-										str = MessageMethod.buildText(User, str);
-										pushText(false, str);
-										msgSend(str);
 								   }
+								   sendtext.setText("");
+							  } else {
+								   ToastShow("Your Text is longer than 500 words!");
 							  }
-							  sendtext.setText("");
 						 } else {
-							  ToastShow("Msg Error!");
+							  ToastShow("Msg is Empty!");
 						 }
 					}
 			   });
@@ -324,15 +328,14 @@ public class ChatActivity extends Activity {
 					ToastShow("You'd better close VPN!");
 					return false;
 			   } else {
-					if (NetWorkMethod.isWifiApEnabled(this)) {
-						 ToastShow("You'd better use Wifi Environment but not AP Environment!");
-						 return false;
-					} else {
-						 return true;
-					}
+					return true;
 			   }
 		  } else {
-			   ToastShow("Wifi Connect Error!");
+			   if (NetWorkMethod.isOnlyMobileNetWork(this)) {
+					ToastShow("We don't support mobile network");
+			   } else {
+					ToastShow("Wifi Connect Error!");
+			   }
 			   return false;
 		  }
 	 }

@@ -2,7 +2,6 @@ package tool.xfy9326.chat.Methods;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import java.io.InputStream;
@@ -74,14 +73,17 @@ public class NetWorkMethod {
 
 	 //检测WIFI网络连接
 	 public static boolean isWifiConnected(Context context) {  
-		  if (context != null) {  
-			   ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);  
-			   NetworkInfo mWiFiNetworkInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);  
-			   if (mWiFiNetworkInfo != null) {  
-					return mWiFiNetworkInfo.isAvailable();  
-			   }  
-		  }  
-		  return false;  
+		  ConnectivityManager con= (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		  boolean wifi = con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+		  return wifi;
+	 }
+	 
+	 //检测是否只使用移动网络
+	 public static boolean isOnlyMobileNetWork(Context context) {
+		  ConnectivityManager con= (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		  boolean internet=con.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+		  boolean wifi = con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+		  return !wifi && internet;
 	 }
 
 	 //检测VPN使用状态
@@ -107,10 +109,17 @@ public class NetWorkMethod {
 	 //获取本地IP
 	 public static String getLocalIP(Context ctx) {
 		  WifiManager wifiService = (WifiManager) ctx.getSystemService(ctx.WIFI_SERVICE);
-		  WifiInfo wifiinfo = wifiService.getConnectionInfo();
-		  String ip = intToIp(wifiinfo.getIpAddress());
-		  if (ip.equalsIgnoreCase("0.0.0.0")) {
-			   ip = "127.0.0.1";
+		  String ip = "127.0.0.1";
+		  if (isWifiApEnabled(ctx)) {
+			   ip = "192.168.43.1";
+		  } else {
+			   WifiInfo wifiinfo = wifiService.getConnectionInfo();
+			   String wifiip = intToIp(wifiinfo.getIpAddress());
+			   if (wifiip.equalsIgnoreCase("0.0.0.0")) {
+					ip = "127.0.0.1";
+			   } else {
+					ip = wifiip;
+			   }
 		  }
 		  return ip;
 	 }
