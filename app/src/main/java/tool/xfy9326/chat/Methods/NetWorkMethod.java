@@ -109,14 +109,14 @@ public class NetWorkMethod {
 	 //获取本地IP
 	 public static String getLocalIP(Context ctx) {
 		  WifiManager wifiService = (WifiManager) ctx.getSystemService(ctx.WIFI_SERVICE);
-		  String ip = "127.0.0.1";
+		  String ip = Config.IP_LOCALHOST;
 		  if (isWifiApEnabled(ctx)) {
 			   ip = "192.168.43.1";
 		  } else {
 			   WifiInfo wifiinfo = wifiService.getConnectionInfo();
 			   String wifiip = intToIp(wifiinfo.getIpAddress());
 			   if (wifiip.equalsIgnoreCase("0.0.0.0")) {
-					ip = "127.0.0.1";
+					ip = Config.IP_LOCALHOST;
 			   } else {
 					ip = wifiip;
 			   }

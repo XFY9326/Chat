@@ -55,8 +55,8 @@ public class MessageMethod extends Thread {
 	 }
 
      //系统提示构建
-	 public static String buildSystemText(String text) {
-		  String result = "#Server Message# [" + getMsgTime() + "]" + "\n" + text;
+	 public static String buildSystemText(String title, String text) {
+		  String result = "#" + title + "# [" + getMsgTime() + "]" + "\n" + text;
 		  result = buildColorText(result, Config.COLOR_SYSTEM);
 		  return result;
 	 }

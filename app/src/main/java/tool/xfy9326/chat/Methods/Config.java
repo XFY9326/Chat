@@ -4,10 +4,21 @@ public class Config
 {
 	 public static int NOTIFICATION_ID = 51030;
 	 
+	 public static String IP_LOCALHOST = "127.0.0.1";
+	 
 	 public static String COLOR_SYSTEM = "#E53935";
 	 public static String COLOR_INFO = "#66BB6A";
 	 public static String COLOR_ALERTUSER = "#FF9800";
 	 public static String COLOR_SECRETCHAT = "#87CEFA";
+	 
+	 public static String DATA_USERNAME = "UserName";
+	 public static String DATA_PORT= "Port";
+	 public static String DATA_PASSWORD = "PassWord";
+	 public static String DATA_SERVERIP = "RemoteIP";
+	 
+	 public static String DATA_DEFAULT_USERNAME = "User";
+	 public static String DATA_DEFAULT_PORT = "51030";
+	 public static String DATA_DEFAULT_PASSWORD = "123456789";
 	 
 	 public static int TYPE_MSG = 1;
 	 public static int TYPE_USERLIST = 2;

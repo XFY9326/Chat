@@ -35,7 +35,6 @@ import tool.xfy9326.chat.Tools.FormatArrayList;
 public class ChatActivity extends Activity {
 	 private String PassWord;
 	 private String User;
-	 private String DefaultString = "Welcome to ChatRoom (Made By XFY9326)";
 	 private ArrayList<String> RemoteIP = new ArrayList<String>();
 	 private int Port;
 	 private EditText sendtext;
@@ -61,8 +60,8 @@ public class ChatActivity extends Activity {
 		  mSp = PreferenceManager.getDefaultSharedPreferences(this);
 		  mSpEditor = mSp.edit();
 		  ViewSet();
-		  pushText(true, DefaultString);
-		  pushText(true, "Local IP> " + NetWorkMethod.getLocalIP(this));
+		  pushText(true, getString(R.string.msg_welcome));
+		  pushText(true, getString(R.string.ip_local) + "> " + NetWorkMethod.getLocalIP(this));
 		  Settings();
 	 }
 
@@ -71,18 +70,18 @@ public class ChatActivity extends Activity {
 		  LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 		  View layout = inflater.inflate(R.layout.dialog_settings, null);
 		  final EditText usertext = (EditText) layout.findViewById(R.id.edittext_username);
-		  usertext.setText(mSp.getString("UserName", "User"));
+		  usertext.setText(mSp.getString(Config.DATA_USERNAME, Config.DATA_DEFAULT_USERNAME));
 		  final EditText porttext = (EditText) layout.findViewById(R.id.edittext_port);
-		  porttext.setText(mSp.getString("Port", "51030"));
+		  porttext.setText(mSp.getString(Config.DATA_PORT, Config.DATA_DEFAULT_PORT));
 		  final EditText iptext = (EditText) layout.findViewById(R.id.edittext_serverip);
-		  iptext.setText(mSp.getString("RemoteIP", NetWorkMethod.getLocalIP(this)));
+		  iptext.setText(mSp.getString(Config.DATA_SERVERIP, NetWorkMethod.getLocalIP(this)));
 		  final EditText pwtext = (EditText) layout.findViewById(R.id.edittext_password);
-		  pwtext.setText(mSp.getString("PassWord", "PassWord"));
+		  pwtext.setText(mSp.getString(Config.DATA_PASSWORD, Config.DATA_DEFAULT_PASSWORD));
 		  AlertDialog.Builder set = new AlertDialog.Builder(this);
-		  set.setTitle("Settings");
+		  set.setTitle(R.string.settings);
 		  set.setCancelable(false);
 		  set.setView(layout);
-		  set.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+		  set.setPositiveButton(R.string.submit, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface d, int i) {
 						 String ip = iptext.getText().toString();
@@ -102,38 +101,38 @@ public class ChatActivity extends Activity {
 												  Port = Integer.valueOf(port);
 												  PassWord = pw;
 
-												  mSpEditor.putString("UserName", user);
-												  mSpEditor.putString("Port", port);
-												  mSpEditor.putString("RemoteIP", ip);
-												  mSpEditor.putString("PassWord", pw);
+												  mSpEditor.putString(Config.DATA_USERNAME, user);
+												  mSpEditor.putString(Config.DATA_PORT, port);
+												  mSpEditor.putString(Config.DATA_SERVERIP, ip);
+												  mSpEditor.putString(Config.DATA_PASSWORD, pw);
 												  mSpEditor.apply();
 
-												  pushText(true, "Port> " + port);
-												  pushText(true, "User Name> " + user);
+												  pushText(true, getString(R.string.port) + "> " + port);
+												  pushText(true, getString(R.string.username) + "> " + user);
 												  NetWorkSet();
 											 } else {
-												  ToastShow("PassWord Error!");
+												  ToastShow(R.string.err_password);
 												  ChatActivity.this.Settings();
 											 }
 										} else {
-											 ToastShow("User Name Error!");
+											 ToastShow(R.string.err_username);
 											 ChatActivity.this.Settings();
 										}
 								   } else {
-										ToastShow("This Port has been used!\nClose this app completely may solve it.");
+										ToastShow(R.string.err_port_used);
 										ChatActivity.this.Settings();
 								   }
 							  } else {
-								   ToastShow("Server Port Error!");
+								   ToastShow(R.string.err_server_port);
 								   ChatActivity.this.Settings();
 							  }
 						 } else {
-							  ToastShow("Server IP Error!");
+							  ToastShow(R.string.err_server_ip);
 							  ChatActivity.this.Settings();
 						 }
 					}
 			   });
-		  set.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  set.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface d, int i) {
 						 CloseApp();
@@ -179,10 +178,10 @@ public class ChatActivity extends Activity {
 								   }
 								   sendtext.setText("");
 							  } else {
-								   ToastShow("Your Text is longer than 500 words!");
+								   ToastShow(R.string.err_msg_toolong);
 							  }
 						 } else {
-							  ToastShow("Msg is Empty!");
+							  ToastShow(R.string.err_msg_empty);
 						 }
 					}
 			   });
@@ -195,7 +194,7 @@ public class ChatActivity extends Activity {
 			   @Override
 			   public void handleMessage(Message msg) {
 					if (msg.what == 0 && msg.getData() == null) {
-						 ToastShow("Receive Data Error!");
+						 ToastShow(R.string.err_data_receive);
 					} else {
 						 Bundle bundle = msg.getData();
 						 if (msg.what == Config.TYPE_MSG) {
@@ -232,7 +231,7 @@ public class ChatActivity extends Activity {
 							  //用户列表删减
 							  String[] Result = bundle.getString("RESULT").split("-");
 							  RemoteIP.remove(Result[1].trim().toString());
-							  pushText(false, MessageMethod.buildSystemText(Result[0] + " is offline now (" + Result[1] + ")"));
+							  pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), Result[0] + " " + getString(R.string.warn_offline) + " (" + Result[1] + ")"));
 						 } else if (msg.what == Config.TYPE_ALERT_USER) {
 							  //提醒功能
 							  SystemMethod.vibrateAlert(ChatActivity.this);
@@ -278,7 +277,7 @@ public class ChatActivity extends Activity {
 					//信息反馈
 					String info ="";
 					if (NetWorkServer == null) {
-						 info = MessageMethod.buildSystemText("Server has not start yet");
+						 info = MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_server_notstart));
 					} else {
 						 info = "--- Server Info ---" + "\n"
 							  + "User Name: " + User + "\n"
@@ -295,17 +294,17 @@ public class ChatActivity extends Activity {
 					//私聊
 					String secretmode = originalCmd.substring(cmd.length() + 1);
 					if (secretmode.equalsIgnoreCase("off")) {
-						 pushText(false, MessageMethod.buildSystemText("Secret Mode is Off"));
+						 pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_secretmode_off)));
 						 secretChatUser = "";
 						 secretChatMode = false;
 					} else {
 						 secretmode = MessageMethod.fixIP(secretmode, this);
 						 if (NetWorkMethod.isIPCorrect(secretmode)) {
-							  pushText(false, MessageMethod.buildSystemText("Secret Mode is On (" + secretmode + ")"));
+							  pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_secretmode_on) + " (" + secretmode + ")"));
 							  secretChatUser = secretmode;
 							  secretChatMode = true;
 						 } else {
-							  ToastShow("IP Format Error!");
+							  ToastShow(R.string.err_ip_format);
 						 }
 					}
 					break;
@@ -316,7 +315,7 @@ public class ChatActivity extends Activity {
 					break;
 			   default:
 					//错误提示
-					pushText(false, MessageMethod.buildSystemText("Unknown Command '" + originalCmd + "'"));
+					pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_unknown_command) + " '" + originalCmd + "'"));
 					break;
 		  }
 	 }
@@ -325,16 +324,16 @@ public class ChatActivity extends Activity {
 	 private boolean checkNetWorkServer() {
 		  if (NetWorkMethod.isWifiConnected(this)) {
 			   if (NetWorkMethod.isVpnUsed()) {
-					ToastShow("You'd better close VPN!");
+					ToastShow(R.string.err_vpn_connect);
 					return false;
 			   } else {
 					return true;
 			   }
 		  } else {
 			   if (NetWorkMethod.isOnlyMobileNetWork(this)) {
-					ToastShow("We don't support mobile network");
+					ToastShow(R.string.err_moblie_connect);
 			   } else {
-					ToastShow("Wifi Connect Error!");
+					ToastShow(R.string.err_wifi_connect);
 			   }
 			   return false;
 		  }
@@ -361,6 +360,7 @@ public class ChatActivity extends Activity {
 			   }
 			   String result = CHATTEXT.replace("\n", "<br>");
 			   chattext.setText(Html.fromHtml(result));
+			   //应用不在前台时通知栏提示
 			   if (!SystemMethod.isTopActivity(ChatActivity.this, getPackageName())) {
 					NoReadNum ++;
 					MessageMethod.NotifyMsg(ChatActivity.this, Html.fromHtml(str), NotifyBuilder, NoReadNum);
@@ -383,14 +383,14 @@ public class ChatActivity extends Activity {
 	 }
 
 	 //显示Toast
-	 private void ToastShow(String str) {
-		  Toast.makeText(ChatActivity.this, str, Toast.LENGTH_SHORT).show();
+	 private void ToastShow(int id) {
+		  Toast.makeText(ChatActivity.this, getString(id), Toast.LENGTH_SHORT).show();
 	 }
 
 	 //获取用户数量
 	 private int getUserCount() {
 		  if (RemoteIP.size() == 1) {
-			   if (RemoteIP.get(0).equals("127.0.0.1") || RemoteIP.get(0).equals(NetWorkMethod.getLocalIP(this))) {
+			   if (RemoteIP.get(0).equals(Config.IP_LOCALHOST) || RemoteIP.get(0).equals(NetWorkMethod.getLocalIP(this))) {
 					return 1;
 			   } else {
 					return 2;
@@ -414,11 +414,7 @@ public class ChatActivity extends Activity {
 						 if (NetWorkMethod.isIPCorrect(get)) {
 							  alert.add(get);
 							  str = str.replace(originget, MessageMethod.buildColorText(originget, Config.COLOR_ALERTUSER));
-						 } else {
-							  ToastShow("Alert IP Format '" + originget + "' Error!");
 						 }
-					} else {
-						 ToastShow("Alert Format '" + originget + "' Error!");
 					}
 			   }
 		  }
@@ -449,7 +445,7 @@ public class ChatActivity extends Activity {
 	 private void registerServer() {
 		  if (!ServerRegistered) {
 			   ServerRegistered = true;
-			   msgSend(MessageMethod.buildSystemText(User + " is online now (" + NetWorkMethod.getLocalIP(ChatActivity.this) + ")"));
+			   msgSend(MessageMethod.buildSystemText(getString(R.string.msg_system), User + " " + getString(R.string.warn_online) + " (" + NetWorkMethod.getLocalIP(ChatActivity.this) + ")"));
 		  }
 	 }
 
@@ -472,9 +468,9 @@ public class ChatActivity extends Activity {
 	 @Override
 	 public void onBackPressed() {
 		  AlertDialog.Builder back = new AlertDialog.Builder(this);
-		  back.setTitle("Attention");
-		  back.setMessage("Do you really want to close it?");
-		  back.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+		  back.setTitle(R.string.attention);
+		  back.setMessage(R.string.msg_close_app);
+		  back.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface d, int i) {
 						 unregisterServer();
 						 CloseApp();
@@ -487,7 +483,7 @@ public class ChatActivity extends Activity {
 							  }, 800);
 					}
 			   });
-		  back.setNegativeButton("Cancel", null);
+		  back.setNegativeButton(R.string.cancel, null);
 		  back.show();
 	 }
 }

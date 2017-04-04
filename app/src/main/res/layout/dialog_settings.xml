@@ -17,7 +17,7 @@
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:layout_width="wrap_content"
-			android:text="UserName"
+			android:text="@string/username"
 			android:layout_marginRight="7dp"
 			android:textSize="16sp"/>
 
@@ -26,7 +26,7 @@
 			android:layout_width="match_parent"
 			android:ems="10"
 			android:id="@+id/edittext_username"
-			android:hint="User Name"
+			android:hint="@string/username"
 			android:singleLine="true"/>
 
 	</LinearLayout>
@@ -42,7 +42,7 @@
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:layout_width="wrap_content"
-			android:text="Port"
+			android:text="@string/port"
 			android:layout_marginRight="7dp"
 			android:textSize="16sp"/>
 
@@ -52,7 +52,7 @@
 			android:ems="10"
 			android:id="@+id/edittext_port"
 			android:inputType="number"
-			android:hint="Port [5000~60000]"
+			android:hint="@string/port_hint"
 			android:singleLine="true"/>
 
 	</LinearLayout>
@@ -67,7 +67,7 @@
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:layout_width="wrap_content"
-			android:text="PassWord"
+			android:text="@string/password"
 			android:layout_marginRight="7dp"
 			android:textSize="16sp"/>
 
@@ -77,7 +77,7 @@
 			android:ems="10"
 			android:id="@+id/edittext_password"
 			android:inputType="numberPassword"
-			android:hint="PassWord"
+			android:hint="@string/password"
 			android:singleLine="true"/>
 
 	</LinearLayout>
@@ -99,7 +99,7 @@
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:layout_width="wrap_content"
-			android:text="Server IP"
+			android:text="@string/ip_server"
 			android:layout_marginRight="7dp"
 			android:textSize="16sp"/>
 
@@ -108,7 +108,7 @@
 			android:layout_width="match_parent"
 			android:ems="10"
 			android:id="@+id/edittext_serverip"
-			android:hint="Server IP"
+			android:hint="@string/ip_server"
 			android:singleLine="true"/>
 
 	</LinearLayout>
@@ -117,7 +117,7 @@
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:layout_width="match_parent"
-		android:text="If you are the Server, please leave it empty."
+		android:text="@string/msg_serverip"
 		android:gravity="center"/>
 
 </LinearLayout>

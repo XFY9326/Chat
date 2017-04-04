@@ -58,7 +58,7 @@
 		<Button
 			android:layout_height="45dp"
 			android:layout_width="wrap_content"
-			android:text="Send"
+			android:text="@string/send"
 			android:layout_toRightOf="@id/edittext_send"
 			android:id="@+id/button_send"
 			android:layout_weight="1.0"
