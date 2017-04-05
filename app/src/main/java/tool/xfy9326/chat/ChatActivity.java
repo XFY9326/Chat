@@ -418,6 +418,10 @@ public class ChatActivity extends Activity {
 			   return RemoteIP.size() + 1;
 		  }
 	 }
+	 
+	 private boolean hasUser(String ip){
+		  return RemoteIP.contains(ip.trim());
+	 }
 
 	 //提醒用户
 	 private String alertUser(String str) {
@@ -430,7 +434,7 @@ public class ChatActivity extends Activity {
 					String get = originget.substring(1).trim();
 					if (!get.contains("@")) {
 						 get = MessageMethod.fixIP(get, ChatActivity.this);
-						 if (NetWorkMethod.isIPCorrect(get)) {
+						 if (NetWorkMethod.isIPCorrect(get) && hasUser(get)) {
 							  alert.add(get);
 							  str = str.replace(originget, MessageMethod.buildColorText(originget, Config.COLOR_ALERTUSER));
 						 }
