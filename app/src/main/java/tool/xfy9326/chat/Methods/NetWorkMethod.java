@@ -75,6 +75,9 @@ public class NetWorkMethod {
 	 public static boolean isWifiConnected(Context context) {  
 		  ConnectivityManager con= (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		  boolean wifi = con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+		  if (isWifiApEnabled(context)) {
+			   wifi = true;
+		  }
 		  return wifi;
 	 }
 	 

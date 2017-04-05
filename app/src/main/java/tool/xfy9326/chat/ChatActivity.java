@@ -10,9 +10,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -144,6 +146,16 @@ public class ChatActivity extends Activity {
 	 //布局设置
 	 private void ViewSet() {
 		  sendtext = (EditText) findViewById(R.id.edittext_send);
+		  sendtext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+					@Override
+					public boolean onEditorAction(TextView text, int id, KeyEvent event) {
+						 if (id == EditorInfo.IME_ACTION_SEND) {
+							  SendText();
+							  return true;
+						 }
+						 return false;
+					}
+			   });
 		  chatinfotext = (TextView) findViewById(R.id.textview_chatinfo);
 		  chattext = (TextView) findViewById(R.id.textview_chat);
 		  chatscroll = (ScrollView) findViewById(R.id.scroll_chat);
@@ -152,39 +164,44 @@ public class ChatActivity extends Activity {
 		  send.setOnClickListener(new OnClickListener(){
 					@Override
 					public void onClick(View v) {
-                         String str = sendtext.getText().toString().trim();
-						 if (!str.isEmpty()) {
-							  if (str.length() <= 500) {
-								   if (str.startsWith("/")) {
-										//命令
-										CommandHandler(str.substring(1));
-								   } else {
-										//信息
-										if (secretChatMode) {
-											 //私聊
-											 str = MessageMethod.buildColorText(MessageMethod.buildText(User, str), Config.COLOR_SECRETCHAT);
-											 pushText(false, str);
-											 NetWorkClient.Send(secretChatUser, str, Config.TYPE_SECRET_CHAT);
-										} else {
-											 //正常发送
-											 if (str.contains("@")) {
-												  //提醒
-												  str = alertUser(str);
-											 }
-											 str = MessageMethod.buildText(User, str);
-											 pushText(false, str);
-											 msgSend(str);
-										}
-								   }
-								   sendtext.setText("");
-							  } else {
-								   ToastShow(R.string.err_msg_toolong);
-							  }
-						 } else {
-							  ToastShow(R.string.err_msg_empty);
-						 }
+                         SendText();
 					}
 			   });
+	 }
+
+	 //发送输入的文字
+	 private void SendText() {
+		  String str = sendtext.getText().toString().trim();
+		  if (!str.isEmpty()) {
+			   if (str.length() <= 500) {
+					if (str.startsWith("/")) {
+						 //命令
+						 CommandHandler(str.substring(1));
+					} else {
+						 //信息
+						 if (secretChatMode) {
+							  //私聊
+							  str = MessageMethod.buildColorText(MessageMethod.buildText(User, str), Config.COLOR_SECRETCHAT);
+							  pushText(false, str);
+							  NetWorkClient.Send(secretChatUser, str, Config.TYPE_SECRET_CHAT);
+						 } else {
+							  //正常发送
+							  if (str.contains("@")) {
+								   //提醒
+								   str = alertUser(str);
+							  }
+							  str = MessageMethod.buildText(User, str);
+							  pushText(false, str);
+							  msgSend(str);
+						 }
+					}
+					sendtext.setText("");
+			   } else {
+					ToastShow(R.string.err_msg_toolong);
+			   }
+		  } else {
+			   ToastShow(R.string.err_msg_empty);
+		  }
 	 }
 
 	 //网络设置
@@ -234,7 +251,9 @@ public class ChatActivity extends Activity {
 							  pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), Result[0] + " " + getString(R.string.warn_offline) + " (" + Result[1] + ")"));
 						 } else if (msg.what == Config.TYPE_ALERT_USER) {
 							  //提醒功能
-							  SystemMethod.vibrateAlert(ChatActivity.this);
+							  if (bundle.getString("RESULT").equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this))) {
+								   SystemMethod.vibrateAlert(ChatActivity.this);
+							  }
 						 } else if (msg.what == Config.TYPE_SECRET_CHAT) {
 							  //私聊功能
 							  String secretmsg = bundle.getString("RESULT");
@@ -418,7 +437,7 @@ public class ChatActivity extends Activity {
 					}
 			   }
 		  }
-		  NetWorkClient.Send(alert, "NULL", Config.TYPE_ALERT_USER);
+		  NetWorkClient.Send(alert, NetWorkMethod.getLocalIP(ChatActivity.this), Config.TYPE_ALERT_USER);
 		  return str;
 	 }
 
@@ -480,7 +499,7 @@ public class ChatActivity extends Activity {
 								   public void run() {
 										CloseSocketServerConnect();
 								   }
-							  }, 800);
+							  }, 500);
 					}
 			   });
 		  back.setNegativeButton(R.string.cancel, null);

@@ -53,7 +53,8 @@
 			android:id="@+id/edittext_send"
 			android:layout_weight="20.0"
 			android:textSize="15sp"
-			android:maxHeight="75dp"/>
+			android:maxHeight="75dp"
+			android:inputType="text"/>
 
 		<Button
 			android:layout_height="45dp"

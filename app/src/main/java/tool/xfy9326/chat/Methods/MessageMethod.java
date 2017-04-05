@@ -35,7 +35,6 @@ public class MessageMethod extends Thread {
 		  notification.setWhen(System.currentTimeMillis());
 		  notification.setContentTitle(ctx.getString(R.string.app_name));
 		  notification.setPriority(Notification.PRIORITY_DEFAULT);
-		  notification.setCategory(Notification.CATEGORY_MESSAGE);
 		  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			   notification.setFullScreenIntent(pendingIntent, true);
 		  } 
