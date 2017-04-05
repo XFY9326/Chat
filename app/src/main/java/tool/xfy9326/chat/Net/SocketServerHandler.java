@@ -65,15 +65,25 @@ public class SocketServerHandler extends Thread {
 	 public void StopServer() {
 		  try {
 			   if (Server != null && executor != null) {
-					if (!Server.isClosed()) {
-						 flag = false;
-						 executor.shutdownNow();
-						 Server.close();
+					if (!executor.isShutdown()) {
+						 executor.shutdown();
 					}
-					if (!interrupted() || isAlive()) {
-						 Thread.currentThread().interrupt();
+					if (executor.isTerminated()) {
+						 if (!Server.isClosed()) {
+							  flag = false;
+							  Server.close();
+						 } else if (!interrupted() || isAlive()) {
+							  Thread.currentThread().interrupt();
+						 }
+					} else {
+						 try {
+							  sleep(500);
+							  StopServer();
+						 } catch (InterruptedException e) {
+							  e.printStackTrace();
+							  StopServer();
+						 }
 					}
-
 			   }
 		  } catch (IOException e) {
 			   e.printStackTrace();

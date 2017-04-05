@@ -503,7 +503,7 @@ public class ChatActivity extends Activity {
 								   public void run() {
 										CloseSocketServerConnect();
 								   }
-							  }, 500);
+							  }, 800);
 					}
 			   });
 		  back.setNegativeButton(R.string.cancel, null);
