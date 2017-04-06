@@ -1,40 +1,34 @@
 package tool.xfy9326.chat.Net;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import tool.xfy9326.chat.Methods.Config;
-import tool.xfy9326.chat.Methods.SystemMethod;
-import java.util.List;
 
-//多线程发送Socket信息处理
+//发送Socket信息处理
 public class SocketClientHandler {
 	 private int Port;
 	 private String PassWord = null;
-	 private ExecutorService executor = null;
 
 	 public SocketClientHandler(int port, String pw) {
 		  this.Port = port;
 		  this.PassWord = pw;
-		  executor = Executors.newFixedThreadPool(SystemMethod.getCpuNumCores());
 	 }
 
 	 //单IP发送
 	 public void Send(String IP, String text, int type) {
-		  executor.execute(new SocketClient(TagFix(text, type), IP, Port, PassWord));
+		  new SocketClient(TagFix(text, type), IP, Port, PassWord).start();
 	 }
 
 	 //多IP发送
 	 public void Send(ArrayList<String> IP, String text, int type) {
 		  if (IP.size() > 0) {
 			   for (String ip : IP) {
-					executor.execute(new SocketClient(TagFix(text, type), ip, Port, PassWord));
+					new SocketClient(TagFix(text, type), ip, Port, PassWord).start();
 			   }
 		  }
 	 }
 
 	 public void Close() {
-		  executor.shutdownNow();
+		  Thread.currentThread().interrupt();
 	 }
 
 	 private String TagFix(String text, int type) {

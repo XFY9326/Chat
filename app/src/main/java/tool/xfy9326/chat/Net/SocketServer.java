@@ -54,6 +54,7 @@ public class SocketServer extends Thread {
 					}
 					message.setData(bundle);
 					NetHandler.sendMessage(message);
+					socketIn.close();
 					CloseConnect();
 			   }
 
@@ -65,18 +66,15 @@ public class SocketServer extends Thread {
 	 //确认客户端关闭后再关闭
 	 private void CloseConnect() {
 		  if (isClientClosed()) {
-			   if (socket.isClosed()) {
-					try {
-						 socketIn.close();
-						 socket.close();
-					} catch (IOException e) {
-						 e.printStackTrace();
-					}
+			   try {
+					socket.close();
+			   } catch (IOException e) {
+					e.printStackTrace();
 			   }
 			   Thread.currentThread().interrupt();
 		  } else {
 			   try {
-					sleep(800);
+					sleep(500);
 					CloseConnect();
 			   } catch (InterruptedException e) {
 					e.printStackTrace();
