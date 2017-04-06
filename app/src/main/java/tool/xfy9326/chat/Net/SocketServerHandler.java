@@ -61,18 +61,19 @@ public class SocketServerHandler extends Thread {
 		  super.start();
 	 }
 
-	 //关闭所有线程服务
+	 //关闭所有线程服务(等待所有线程结束)
 	 public void StopServer() {
 		  try {
 			   if (Server != null && executor != null) {
 					if (!executor.isShutdown()) {
+						 flag = false;
 						 executor.shutdown();
 					}
 					if (executor.isTerminated()) {
 						 if (!Server.isClosed()) {
-							  flag = false;
 							  Server.close();
-						 } else if (!interrupted() || isAlive()) {
+						 }
+						 if (!interrupted() || isAlive()) {
 							  Thread.currentThread().interrupt();
 						 }
 					} else {

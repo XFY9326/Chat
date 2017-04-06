@@ -418,8 +418,8 @@ public class ChatActivity extends Activity {
 			   return RemoteIP.size() + 1;
 		  }
 	 }
-	 
-	 private boolean hasUser(String ip){
+
+	 private boolean hasUser(String ip) {
 		  return RemoteIP.contains(ip.trim());
 	 }
 
@@ -504,6 +504,7 @@ public class ChatActivity extends Activity {
 										CloseSocketServerConnect();
 								   }
 							  }, 800);
+						 d.dismiss();
 					}
 			   });
 		  back.setNegativeButton(R.string.cancel, null);

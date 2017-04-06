@@ -25,7 +25,7 @@ public class SystemMethod {
 	 //用户提醒
 	 public static void vibrateAlert(Context ctx) {
 		  Vibrator vibrator = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
-		  vibrator.vibrate(200);
+		  vibrator.vibrate(250);
 	 }
 
 	 //CPU核心数获取
