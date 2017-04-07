@@ -53,7 +53,7 @@ public class SocketServerHandler extends Thread {
 	 public void start() {
 		  try {
 			   Server = new ServerSocket(Port);
-			   executor = Executors.newFixedThreadPool(SystemMethod.getCpuNumCores());
+			   executor = Executors.newFixedThreadPool(SystemMethod.getCpuNumCores() * 2);
 			   flag = true;
 		  } catch (IOException e) {
 			   e.printStackTrace();
