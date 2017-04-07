@@ -37,7 +37,7 @@ public class MessageMethod extends Thread {
 		  notification.setPriority(Notification.PRIORITY_DEFAULT);
 		  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			   notification.setFullScreenIntent(pendingIntent, true);
-		  } 
+		  }
 		  return notification;
 	 }
 
