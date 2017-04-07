@@ -27,6 +27,15 @@ public class SocketClientHandler {
 		  }
 	 }
 
+	 //多IP发送不同内容
+	 public void Send(ArrayList<String> IP, ArrayList<String> text, int type) {
+		  if (IP.size() > 0) {
+			   for (int i = 0;i < IP.size(); i++) {
+					new SocketClient(TagFix(text.get(i), type), IP.get(i), Port, PassWord).start();
+			   }
+		  }
+	 }
+
 	 public void Close() {
 		  Thread.currentThread().interrupt();
 	 }

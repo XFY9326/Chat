@@ -441,7 +441,7 @@ public class ChatActivity extends Activity {
 					}
 			   }
 		  }
-		  NetWorkClient.Send(alert, NetWorkMethod.getLocalIP(ChatActivity.this), Config.TYPE_ALERT_USER);
+		  NetWorkClient.Send(alert, alert, Config.TYPE_ALERT_USER);
 		  return str;
 	 }
 
