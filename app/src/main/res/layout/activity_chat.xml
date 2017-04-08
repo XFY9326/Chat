@@ -36,7 +36,9 @@
 		android:layout_width="match_parent"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
-		android:padding="5dp">
+		android:padding="5dp"
+		android:background="@color/colorSendtext"
+		android:gravity="center">
 
 		<EditText
 			android:layout_height="wrap_content"
@@ -48,13 +50,13 @@
 			android:maxHeight="75dp"/>
 
 		<Button
-			android:layout_height="45dp"
-			android:layout_width="wrap_content"
-			android:text="@string/send"
+			android:layout_height="30dp"
+			android:layout_width="30dp"
 			android:layout_toRightOf="@id/edittext_send"
 			android:id="@+id/button_send"
 			android:layout_weight="1.0"
-			android:layout_marginLeft="5dp"/>
+			android:layout_marginLeft="5dp"
+			android:background="@drawable/ic_send"/>
 
 	</LinearLayout>
 

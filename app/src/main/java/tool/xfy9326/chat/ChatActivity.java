@@ -37,6 +37,7 @@ public class ChatActivity extends Activity {
 	 private String PassWord;
 	 private String User;
 	 private ArrayList<String> RemoteIP = new ArrayList<String>();
+	 private ArrayList<String> BlockIP = new ArrayList<String>();
 	 private int Port;
 	 private EditText sendtext;
 	 private TextView chatinfotext;
@@ -218,68 +219,70 @@ public class ChatActivity extends Activity {
 						 ToastShow(R.string.err_data_receive);
 					} else {
 						 Bundle bundle = msg.getData();
-						 if (msg.what == Config.TYPE_MSG) {
-							  //接收信息并显示
-							  String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
-							  pushText(str[2], str[3], str[0], Config.MSGTYPE_OTHERS);
-						 } else if (msg.what == Config.TYPE_USERLIST) {
-							  //接收IP列表
-							  String LocalIP = NetWorkMethod.getLocalIP(ChatActivity.this);
-							  ArrayList<String> users = FormatArrayList.StringToStringArrayList(bundle.getString("RESULT"));
-							  int size = users.size();
-							  for (int i = 0; i < size; i++) {
-								   if (RemoteIP.contains(users.get(i)) || users.get(i).equals(LocalIP) || users.get(i).equals("127.0.0.1")) {
-										users.remove(i);
-										i--;
-										size--;
+						 if (!BlockIP.contains(bundle.getString(Config.DATA_RECEIVE_IP).substring(1))) {
+							  if (msg.what == Config.TYPE_MSG) {
+								   //接收信息并显示
+								   String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
+								   pushText(str[2], str[3], str[0], Config.MSGTYPE_OTHERS);
+							  } else if (msg.what == Config.TYPE_USERLIST) {
+								   //接收IP列表
+								   String LocalIP = NetWorkMethod.getLocalIP(ChatActivity.this);
+								   ArrayList<String> users = FormatArrayList.StringToStringArrayList(bundle.getString("RESULT"));
+								   int size = users.size();
+								   for (int i = 0; i < size; i++) {
+										if (RemoteIP.contains(users.get(i)) || users.get(i).equals(LocalIP) || users.get(i).equals("127.0.0.1")) {
+											 users.remove(i);
+											 i--;
+											 size--;
+										}
+								   }
+								   RemoteIP.addAll(users);
+								   registerServer();
+							  } else if (msg.what == Config.TYPE_ASK_USERLIST) {
+								   //接收询问IP列表的回复
+								   if (RemoteIP.size() >= 1) {
+										if (!RemoteIP.get(0).equals(NetWorkMethod.getLocalIP(ChatActivity.this)) && !RemoteIP.get(0).equalsIgnoreCase(Config.IP_LOCALHOST)) {
+											 if (!RemoteIP.contains(bundle.getString(Config.DATA_RECEIVE))) {
+												  RemoteIP.add(bundle.getString(Config.DATA_RECEIVE));
+											 }
+											 ArrayList<String> users = new ArrayList<String>();
+											 users.addAll(RemoteIP);
+											 users.add(NetWorkMethod.getLocalIP(ChatActivity.this));
+											 NetWorkClient.Send(RemoteIP, users.toString(), Config.TYPE_USERLIST);
+										}
+								   }
+							  } else if (msg.what == Config.TYPE_RELOAD_USERLIST) {
+								   //用户列表删减
+								   String[] Result = bundle.getString(Config.DATA_RECEIVE).split("-");
+								   RemoteIP.remove(Result[1].trim().toString());
+								   pushText(User, Result[0] + " " + getString(R.string.warn_offline) + " (" + Result[1] + ")", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+							  } else if (msg.what == Config.TYPE_ALERT_USER) {
+								   //提醒功能
+								   if (bundle.getString(Config.DATA_RECEIVE).equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this))) {
+										SystemMethod.vibrateAlert(ChatActivity.this);
+								   }
+							  } else if (msg.what == Config.TYPE_SECRET_CHAT) {
+								   //私聊功能
+								   String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
+								   pushText(str[2], str[3], str[0], Config.MSGTYPE_OTHERS_SECRET);
+							  } else if (msg.what == Config.TYPE_SYSTEM) {
+								   //上线提示
+								   String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
+								   if (str[3].equalsIgnoreCase(Config.MSGTYPE_SYSTEM_ONLINE)) {
+										pushText(str[2], str[2] + " " + getString(R.string.warn_online) + " (" + str[1] + ")", str[0] , Config.MSGTYPE_SYSTEM);
 								   }
 							  }
-							  RemoteIP.addAll(users);
-							  registerServer();
-						 } else if (msg.what == Config.TYPE_ASK_USERLIST) {
-							  //接收询问IP列表的回复
-							  if (RemoteIP.size() >= 1) {
-								   if (!RemoteIP.get(0).equals(NetWorkMethod.getLocalIP(ChatActivity.this)) && !RemoteIP.get(0).equalsIgnoreCase(Config.IP_LOCALHOST)) {
-										if (!RemoteIP.contains(bundle.getString(Config.DATA_RECEIVE))) {
-											 RemoteIP.add(bundle.getString(Config.DATA_RECEIVE));
-										}
+							  //接收信息的IP不在列表时发起同步
+							  if (msg.what != Config.TYPE_RELOAD_USERLIST) {
+								   String ReloadIP = bundle.getString(Config.DATA_RECEIVE_IP).substring(1);
+								   if (!ReloadIP.equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this)) && !ReloadIP.equalsIgnoreCase("127.0.0.1") && !RemoteIP.contains(ReloadIP)) {
+										RemoteIP.add(ReloadIP);
 										ArrayList<String> users = new ArrayList<String>();
 										users.addAll(RemoteIP);
 										users.add(NetWorkMethod.getLocalIP(ChatActivity.this));
-										NetWorkClient.Send(RemoteIP, users.toString(), Config.TYPE_USERLIST);
-								   }
-							  }
-						 } else if (msg.what == Config.TYPE_RELOAD_USERLIST) {
-							  //用户列表删减
-							  String[] Result = bundle.getString(Config.DATA_RECEIVE).split("-");
-							  RemoteIP.remove(Result[1].trim().toString());
-							  pushText(User, Result[0] + " " + getString(R.string.warn_offline) + " (" + Result[1] + ")", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
-						 } else if (msg.what == Config.TYPE_ALERT_USER) {
-							  //提醒功能
-							  if (bundle.getString(Config.DATA_RECEIVE).equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this))) {
-								   SystemMethod.vibrateAlert(ChatActivity.this);
-							  }
-						 } else if (msg.what == Config.TYPE_SECRET_CHAT) {
-							  //私聊功能
-							  String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
-							  pushText(str[2], str[3], str[0], Config.MSGTYPE_OTHERS_SECRET);
-						 } else if (msg.what == Config.TYPE_SYSTEM) {
-							  //上线提示
-							  String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
-							  if (str[3].equalsIgnoreCase(Config.MSGTYPE_SYSTEM_ONLINE)) {
-								   pushText(str[2], str[2] + " " + getString(R.string.warn_online) + " (" + str[1] + ")", str[0] , Config.MSGTYPE_SYSTEM);
-							  }
-						 }
-						 //接收信息的IP不在列表时发起同步
-						 if (msg.what != Config.TYPE_RELOAD_USERLIST) {
-							  String ReloadIP = bundle.getString(Config.DATA_RECEIVE_IP).substring(1);
-							  if (!ReloadIP.equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this)) && !ReloadIP.equalsIgnoreCase("127.0.0.1") && !RemoteIP.contains(ReloadIP)) {
-								   RemoteIP.add(ReloadIP);
-								   ArrayList<String> users = new ArrayList<String>();
-								   users.addAll(RemoteIP);
-								   users.add(NetWorkMethod.getLocalIP(ChatActivity.this));
-								   if (NetWorkClient != null) {
-										NetWorkClient.Send(RemoteIP, users.toString(), Config.TYPE_USERLIST);
+										if (NetWorkClient != null) {
+											 NetWorkClient.Send(RemoteIP, users.toString(), Config.TYPE_USERLIST);
+										}
 								   }
 							  }
 						 }
@@ -316,6 +319,7 @@ public class ChatActivity extends Activity {
 							  + "Local IP: " + NetWorkMethod.getLocalIP(this) + "\n"
 							  + "Port: " + Port + "\n"
 							  + "PassWord: " + PassWord + "\n"
+							  + "Block IP: " + BlockIP.toString() + "\n"
 							  + "--- End of List ---";
 					}
 					pushText(null, info, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM_INFO);
@@ -334,6 +338,47 @@ public class ChatActivity extends Activity {
 								   pushText(User, getString(R.string.warn_secretmode_on) + " (" + secretmode + ")", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 								   secretChatUser = secretmode;
 								   secretChatMode = true;
+							  } else {
+								   ToastShow(R.string.err_ip_format);
+							  }
+						 }
+					}
+					break;
+			   case "connect":
+					//重连服务
+					if (originalCmd.length() > 8) {
+						 String ip = originalCmd.substring(cmd.length() + 1);
+						 ip = MessageMethod.fixIP(ip, this);
+						 if (NetWorkMethod.isIPCorrect(ip)) {
+							  RemoteIP.clear();
+							  RemoteIP.add(ip);
+							  NetWorkClient.Send(ip, NetWorkMethod.getLocalIP(this), Config.TYPE_ASK_USERLIST);
+						 } else {
+							  ToastShow(R.string.err_ip_format);
+						 }
+					}
+					break;
+			   case "block":
+					//屏蔽
+					if (originalCmd.length() > 9) {
+						 String blockmode = originalCmd.substring(cmd.length() + 1);
+						 if (blockmode.equalsIgnoreCase("del")) {
+							  blockmode = blockmode.substring(blockmode.length() + 1);
+							  blockmode = MessageMethod.fixIP(blockmode, this);
+							  if (NetWorkMethod.isIPCorrect(blockmode)) {
+								   if (!BlockIP.toString().contains(blockmode)) {
+										BlockIP.add(blockmode.trim());
+								   }
+							  } else {
+								   ToastShow(R.string.err_ip_format);
+							  }
+						 } else if (blockmode.equalsIgnoreCase("add")) {
+							  blockmode = blockmode.substring(blockmode.length() + 1);
+							  blockmode = MessageMethod.fixIP(blockmode, this);
+							  if (NetWorkMethod.isIPCorrect(blockmode)) {
+								   if (BlockIP.toString().contains(blockmode)) {
+										BlockIP.remove(blockmode.trim());
+								   }
 							  } else {
 								   ToastShow(R.string.err_ip_format);
 							  }
