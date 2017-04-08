@@ -80,7 +80,7 @@ public class NetWorkMethod {
 		  }
 		  return wifi;
 	 }
-	 
+
 	 //检测是否只使用移动网络
 	 public static boolean isOnlyMobileNetWork(Context context) {
 		  ConnectivityManager con= (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);

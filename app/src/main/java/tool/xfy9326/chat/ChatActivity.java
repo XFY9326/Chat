@@ -9,15 +9,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.text.Html;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ import tool.xfy9326.chat.Methods.SystemMethod;
 import tool.xfy9326.chat.Net.SocketClientHandler;
 import tool.xfy9326.chat.Net.SocketServerHandler;
 import tool.xfy9326.chat.Tools.FormatArrayList;
+import tool.xfy9326.chat.View.ListViewAdapter;
 
 //主界面
 
@@ -41,19 +40,21 @@ public class ChatActivity extends Activity {
 	 private int Port;
 	 private EditText sendtext;
 	 private TextView chatinfotext;
-	 private TextView chattext;
-	 private ScrollView chatscroll;
+	 private ListView chattext;
+	 private ListViewAdapter chatadapter;
 	 private SocketServerHandler NetWorkServer;
 	 private SocketClientHandler NetWorkClient;
 	 private Handler NetWorkServerHandler;
 	 private SharedPreferences mSp;
 	 private SharedPreferences.Editor mSpEditor;
-	 private String CHATTEXT = "";
 	 private String secretChatUser = "";
 	 private boolean secretChatMode = false;
 	 private Notification.Builder NotifyBuilder = null;
 	 private int NoReadNum = 0;
 	 private boolean ServerRegistered = false;
+
+	 private ArrayList<Integer> Types = new ArrayList<Integer>();
+	 private ArrayList<String> Users = new ArrayList<String>();
 
 	 @Override
 	 protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,8 @@ public class ChatActivity extends Activity {
 		  mSp = PreferenceManager.getDefaultSharedPreferences(this);
 		  mSpEditor = mSp.edit();
 		  ViewSet();
-		  pushText(true, getString(R.string.msg_welcome));
-		  pushText(true, getString(R.string.ip_local) + "> " + NetWorkMethod.getLocalIP(this));
+		  pushInfoText(getString(R.string.msg_welcome));
+		  pushInfoText(getString(R.string.ip_local) + "> " + NetWorkMethod.getLocalIP(this));
 		  Settings();
 	 }
 
@@ -93,7 +94,7 @@ public class ChatActivity extends Activity {
 						 if (NetWorkMethod.isIPCorrect(ip)) {
 							  if (!port.isEmpty() && Integer.valueOf(port) >= 5000 && Integer.valueOf(port) <= 60000) {
 								   if (!NetWorkMethod.isPortUsed(Integer.valueOf(port))) {
-										if (!user.isEmpty()) {
+										if (!user.isEmpty() && !user.contains(">") && !user.contains("-") && !user.contains("_") && !user.contains("[") && !user.contains("]")) {
 											 if (!pw.isEmpty()) {
 												  String localnet = NetWorkMethod.getLocalIP(ChatActivity.this);
 												  User = user + " [" + localnet.substring(localnet.lastIndexOf(".") + 1) + "]";
@@ -109,9 +110,10 @@ public class ChatActivity extends Activity {
 												  mSpEditor.putString(Config.DATA_PASSWORD, pw);
 												  mSpEditor.apply();
 
-												  pushText(true, getString(R.string.port) + "> " + port);
-												  pushText(true, getString(R.string.username) + "> " + user);
+												  pushInfoText(getString(R.string.port) + "> " + port);
+												  pushInfoText(getString(R.string.username) + "> " + user);
 												  NetWorkSet();
+												  pushText(null, getString(R.string.msg_join), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 											 } else {
 												  ToastShow(R.string.err_password);
 												  ChatActivity.this.Settings();
@@ -137,7 +139,7 @@ public class ChatActivity extends Activity {
 		  set.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface d, int i) {
-						 CloseApp();
+						 CloseApp(false);
 					}
 			   });
 		  set.show();
@@ -146,19 +148,22 @@ public class ChatActivity extends Activity {
 	 //布局设置
 	 private void ViewSet() {
 		  sendtext = (EditText) findViewById(R.id.edittext_send);
-		  sendtext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		  chatinfotext = (TextView) findViewById(R.id.textview_chatinfo);
+		  chattext = (ListView) findViewById(R.id.listview_chat);
+		  chatadapter = new ListViewAdapter(this, Types, Users, RemoteIP);
+		  chattext.setAdapter(chatadapter);
+		  chattext.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 					@Override
-					public boolean onEditorAction(TextView text, int id, KeyEvent event) {
-						 if (id == EditorInfo.IME_ACTION_SEND) {
-							  SendText();
+					public boolean onItemLongClick(AdapterView adapter, View view, int id, long l) {
+						 if (Types.get(id) == Config.TYPE_LISTVIEW_CHAT_MSG_OTHERS) {
+							  String name = Users.get(id);
+							  String ip = name.substring(name.indexOf("[") + 1, name.lastIndexOf("]")).toString().trim();
+							  sendtext.append("@" + ip + " ");
 							  return true;
 						 }
 						 return false;
 					}
 			   });
-		  chatinfotext = (TextView) findViewById(R.id.textview_chatinfo);
-		  chattext = (TextView) findViewById(R.id.textview_chat);
-		  chatscroll = (ScrollView) findViewById(R.id.scroll_chat);
 		  NotifyBuilder = MessageMethod.getNotifyBuilder(this);
 		  Button send = (Button) findViewById(R.id.button_send);
 		  send.setOnClickListener(new OnClickListener(){
@@ -181,17 +186,15 @@ public class ChatActivity extends Activity {
 						 //信息
 						 if (secretChatMode) {
 							  //私聊
-							  str = MessageMethod.buildColorText(MessageMethod.buildText(User, str), Config.COLOR_SECRETCHAT);
-							  pushText(false, str);
-							  NetWorkClient.Send(secretChatUser, str, Config.TYPE_SECRET_CHAT);
+							  pushText(User, str, MessageMethod.getMsgTime(), Config.MSGTYPE_MAIN_SECRET);
+							  NetWorkClient.Send(secretChatUser, MessageMethod.msgBuilder(User, NetWorkMethod.getLocalIP(ChatActivity.this), str), Config.TYPE_SECRET_CHAT);
 						 } else {
 							  //正常发送
 							  if (str.contains("@")) {
 								   //提醒
 								   str = alertUser(str);
 							  }
-							  str = MessageMethod.buildText(User, str);
-							  pushText(false, str);
+							  pushText(User, str, MessageMethod.getMsgTime(), Config.MSGTYPE_MAIN);
 							  msgSend(str);
 						 }
 					}
@@ -211,12 +214,14 @@ public class ChatActivity extends Activity {
 			   @Override
 			   public void handleMessage(Message msg) {
 					if (msg.what == 0 && msg.getData() == null) {
+						 //错误消息提示
 						 ToastShow(R.string.err_data_receive);
 					} else {
 						 Bundle bundle = msg.getData();
 						 if (msg.what == Config.TYPE_MSG) {
 							  //接收信息并显示
-							  pushText(false, bundle.getString("RESULT").toString());
+							  String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
+							  pushText(str[2], str[3], str[0], Config.MSGTYPE_OTHERS);
 						 } else if (msg.what == Config.TYPE_USERLIST) {
 							  //接收IP列表
 							  String LocalIP = NetWorkMethod.getLocalIP(ChatActivity.this);
@@ -234,9 +239,9 @@ public class ChatActivity extends Activity {
 						 } else if (msg.what == Config.TYPE_ASK_USERLIST) {
 							  //接收询问IP列表的回复
 							  if (RemoteIP.size() >= 1) {
-								   if (!RemoteIP.get(0).equals(NetWorkMethod.getLocalIP(ChatActivity.this)) && !RemoteIP.get(0).equalsIgnoreCase("127.0.0.1")) {
-										if (!RemoteIP.contains(bundle.getString("RESULT"))) {
-											 RemoteIP.add(bundle.getString("RESULT"));
+								   if (!RemoteIP.get(0).equals(NetWorkMethod.getLocalIP(ChatActivity.this)) && !RemoteIP.get(0).equalsIgnoreCase(Config.IP_LOCALHOST)) {
+										if (!RemoteIP.contains(bundle.getString(Config.DATA_RECEIVE))) {
+											 RemoteIP.add(bundle.getString(Config.DATA_RECEIVE));
 										}
 										ArrayList<String> users = new ArrayList<String>();
 										users.addAll(RemoteIP);
@@ -246,22 +251,28 @@ public class ChatActivity extends Activity {
 							  }
 						 } else if (msg.what == Config.TYPE_RELOAD_USERLIST) {
 							  //用户列表删减
-							  String[] Result = bundle.getString("RESULT").split("-");
+							  String[] Result = bundle.getString(Config.DATA_RECEIVE).split("-");
 							  RemoteIP.remove(Result[1].trim().toString());
-							  pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), Result[0] + " " + getString(R.string.warn_offline) + " (" + Result[1] + ")"));
+							  pushText(User, Result[0] + " " + getString(R.string.warn_offline) + " (" + Result[1] + ")", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 						 } else if (msg.what == Config.TYPE_ALERT_USER) {
 							  //提醒功能
-							  if (bundle.getString("RESULT").equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this))) {
+							  if (bundle.getString(Config.DATA_RECEIVE).equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this))) {
 								   SystemMethod.vibrateAlert(ChatActivity.this);
 							  }
 						 } else if (msg.what == Config.TYPE_SECRET_CHAT) {
 							  //私聊功能
-							  String secretmsg = bundle.getString("RESULT");
-							  pushText(false, secretmsg);
+							  String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
+							  pushText(str[2], str[3], str[0], Config.MSGTYPE_OTHERS_SECRET);
+						 } else if (msg.what == Config.TYPE_SYSTEM) {
+							  //上线提示
+							  String[] str = bundle.getStringArray(Config.DATA_RECEIVE_INFO);
+							  if (str[3].equalsIgnoreCase(Config.MSGTYPE_SYSTEM_ONLINE)) {
+								   pushText(str[2], str[2] + " " + getString(R.string.warn_online) + " (" + str[1] + ")", str[0] , Config.MSGTYPE_SYSTEM);
+							  }
 						 }
 						 //接收信息的IP不在列表时发起同步
 						 if (msg.what != Config.TYPE_RELOAD_USERLIST) {
-							  String ReloadIP = bundle.getString("IP").substring(1);
+							  String ReloadIP = bundle.getString(Config.DATA_RECEIVE_IP).substring(1);
 							  if (!ReloadIP.equalsIgnoreCase(NetWorkMethod.getLocalIP(ChatActivity.this)) && !ReloadIP.equalsIgnoreCase("127.0.0.1") && !RemoteIP.contains(ReloadIP)) {
 								   RemoteIP.add(ReloadIP);
 								   ArrayList<String> users = new ArrayList<String>();
@@ -296,7 +307,7 @@ public class ChatActivity extends Activity {
 					//信息反馈
 					String info ="";
 					if (NetWorkServer == null) {
-						 info = MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_server_notstart));
+						 info = getString(R.string.warn_server_notstart);
 					} else {
 						 info = "--- Server Info ---" + "\n"
 							  + "User Name: " + User + "\n"
@@ -307,34 +318,31 @@ public class ChatActivity extends Activity {
 							  + "PassWord: " + PassWord + "\n"
 							  + "--- End of List ---";
 					}
-					pushText(false, MessageMethod.buildColorText(info, Config.COLOR_INFO));
+					pushText(null, info, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM_INFO);
 					break;
 			   case "talk":
 					//私聊
-					String secretmode = originalCmd.substring(cmd.length() + 1);
-					if (secretmode.equalsIgnoreCase("off")) {
-						 pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_secretmode_off)));
-						 secretChatUser = "";
-						 secretChatMode = false;
-					} else {
-						 secretmode = MessageMethod.fixIP(secretmode, this);
-						 if (NetWorkMethod.isIPCorrect(secretmode)) {
-							  pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_secretmode_on) + " (" + secretmode + ")"));
-							  secretChatUser = secretmode;
-							  secretChatMode = true;
+					if (originalCmd.length() > 5) {
+						 String secretmode = originalCmd.substring(cmd.length() + 1);
+						 if (secretmode.equalsIgnoreCase("off")) {
+							  pushText(User, getString(R.string.warn_secretmode_off), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+							  secretChatUser = "";
+							  secretChatMode = false;
 						 } else {
-							  ToastShow(R.string.err_ip_format);
+							  secretmode = MessageMethod.fixIP(secretmode, this);
+							  if (NetWorkMethod.isIPCorrect(secretmode)) {
+								   pushText(User, getString(R.string.warn_secretmode_on) + " (" + secretmode + ")", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+								   secretChatUser = secretmode;
+								   secretChatMode = true;
+							  } else {
+								   ToastShow(R.string.err_ip_format);
+							  }
 						 }
 					}
 					break;
-			   case "clear":
-					//清空聊天记录
-					CHATTEXT = "";
-					chattext.setText("");
-					break;
 			   default:
 					//错误提示
-					pushText(false, MessageMethod.buildSystemText(getString(R.string.msg_system), getString(R.string.warn_unknown_command) + " '" + originalCmd + "'"));
+					pushText(null, getString(R.string.warn_unknown_command) + " '" + originalCmd + "'", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 					break;
 		  }
 	 }
@@ -358,46 +366,46 @@ public class ChatActivity extends Activity {
 		  }
 	 }
 
-	 //信息推送到UI显示
-	 private void pushText(boolean isinfo, String str) {
-		  if (isinfo) {
-			   String old = chatinfotext.getText().toString();
-			   if (old == "") {
-					chatinfotext.setText(str);
-			   } else {
-					String result = chatinfotext.getText().toString() + "\n" + str ;
-					chatinfotext.setText(result);
-			   }
+	 //配置信息推送到UI显示
+	 private void pushInfoText(String str) {
+		  String old = chatinfotext.getText().toString();
+		  if (old == "") {
+			   chatinfotext.append(str);
 		  } else {
-			   if (CHATTEXT == "") {
-					CHATTEXT = str;
-			   } else {
-					CHATTEXT = CHATTEXT  + "\n" + str;
-			   }
-			   if (CHATTEXT.split("\n").length > 200) {
-					CHATTEXT = CHATTEXT.substring(CHATTEXT.indexOf("\n") + 2);
-			   }
-			   String result = CHATTEXT.replace("\n", "<br>");
-			   chattext.setText(Html.fromHtml(result));
-			   //应用不在前台时通知栏提示
-			   if (!SystemMethod.isTopActivity(ChatActivity.this, getPackageName())) {
-					NoReadNum ++;
-					MessageMethod.NotifyMsg(ChatActivity.this, Html.fromHtml(str), NotifyBuilder, NoReadNum);
-			   }
+			   String result = old + "\n" + str ;
+			   chatinfotext.setText(result);
 		  }
-		  //屏幕滚动
-		  chatscroll.post(new Runnable() {
-					@Override
-					public void run() {
-						 chatscroll.fullScroll(View.FOCUS_DOWN);
-					}
-			   });
+	 }
+
+	 //聊天信息推送到UI显示
+	 private void pushText(String user, String str, String time, int type) {
+		  if (user == null) {
+			   user = Config.DATA_DEFAULT_USERNAME;
+		  }
+		  if (type == Config.MSGTYPE_SYSTEM) {
+			   chatadapter.addSystemMessage(str, time, Config.COLOR_SYSTEM);
+		  } else if (type == Config.MSGTYPE_SYSTEM_INFO) {
+			   chatadapter.addSystemMessage(str, time, Config.COLOR_INFO);
+		  } else if (type == Config.MSGTYPE_MAIN) {
+			   chatadapter.addMainMessage(str, time, null);
+		  } else if (type == Config.MSGTYPE_MAIN_SECRET) {
+			   chatadapter.addMainMessage(str, time, Config.COLOR_SECRETCHAT);
+		  } else if (type == Config.MSGTYPE_OTHERS) {
+			   chatadapter.addOthersMessage(user, str, time, null);
+		  } else if (type == Config.MSGTYPE_OTHERS_SECRET) {
+			   chatadapter.addOthersMessage(user, str, time, Config.COLOR_SECRETCHAT);
+		  }
+		  //应用不在前台时通知栏提示
+		  if (!SystemMethod.isTopActivity(ChatActivity.this, getPackageName())) {
+			   NoReadNum ++;
+			   MessageMethod.NotifyMsg(ChatActivity.this, str, NotifyBuilder, NoReadNum);
+		  }
 	 }
 
 	 //发送对话信息
 	 private void msgSend(String str) {
 		  if (NetWorkClient != null) {
-			   NetWorkClient.Send(RemoteIP, str, Config.TYPE_MSG);
+			   NetWorkClient.Send(RemoteIP, MessageMethod.msgBuilder(User, NetWorkMethod.getLocalIP(ChatActivity.this), str), Config.TYPE_MSG);
 		  }
 	 }
 
@@ -419,6 +427,7 @@ public class ChatActivity extends Activity {
 		  }
 	 }
 
+	 //是否有用户
 	 private boolean hasUser(String ip) {
 		  return RemoteIP.contains(ip.trim());
 	 }
@@ -436,7 +445,6 @@ public class ChatActivity extends Activity {
 						 get = MessageMethod.fixIP(get, ChatActivity.this);
 						 if (NetWorkMethod.isIPCorrect(get) && hasUser(get)) {
 							  alert.add(get);
-							  str = str.replace(originget, MessageMethod.buildColorText(originget, Config.COLOR_ALERTUSER));
 						 }
 					}
 			   }
@@ -468,7 +476,7 @@ public class ChatActivity extends Activity {
 	 private void registerServer() {
 		  if (!ServerRegistered) {
 			   ServerRegistered = true;
-			   msgSend(MessageMethod.buildSystemText(getString(R.string.msg_system), User + " " + getString(R.string.warn_online) + " (" + NetWorkMethod.getLocalIP(ChatActivity.this) + ")"));
+			   NetWorkClient.Send(RemoteIP, MessageMethod.msgBuilder(User, NetWorkMethod.getLocalIP(ChatActivity.this), Config.MSGTYPE_SYSTEM_ONLINE), Config.TYPE_SYSTEM);
 		  }
 	 }
 
@@ -478,12 +486,17 @@ public class ChatActivity extends Activity {
 	 }
 
 	 //退出
-	 private void CloseApp() {
-		  ChatActivity.this.finish();
+	 private void CloseApp(boolean launcher) {
+		  if (launcher) {
+			   moveTaskToBack(true);
+		  } else {
+			   ChatActivity.this.finish();
+		  }
 	 }
 
 	 @Override
 	 protected void onResume() {
+		  //未读计数清零
 		  NoReadNum = 0;
 		  super.onResume();
 	 }
@@ -496,7 +509,7 @@ public class ChatActivity extends Activity {
 		  back.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface d, int i) {
 						 unregisterServer();
-						 CloseApp();
+						 CloseApp(false);
 						 CloseSocketClientConnect();
 						 new Handler().postDelayed(new Runnable(){
 								   @Override
@@ -505,6 +518,12 @@ public class ChatActivity extends Activity {
 								   }
 							  }, 800);
 						 d.dismiss();
+					}
+			   });
+		  back.setNeutralButton(R.string.back_launcher, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface d, int i) {
+						 CloseApp(true);
 					}
 			   });
 		  back.setNegativeButton(R.string.cancel, null);

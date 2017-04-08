@@ -60,6 +60,9 @@ public class SocketClientHandler {
 			   case 6:
 					text = Config.SECRET_TAG + text;
 					break;
+			   case 7:
+					text = Config.SYSTEM_TAG + text;
+					break;
 		  }
 		  return text;
 	 }

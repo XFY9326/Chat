@@ -4,39 +4,32 @@
 	android:layout_height="match_parent"
 	android:layout_width="match_parent">
 
-	<ScrollView
+	<LinearLayout
 		android:layout_height="match_parent"
 		android:layout_width="match_parent"
-		android:layout_marginBottom="60dp"
-		android:padding="5dp"
-		android:id="@+id/scroll_chat">
+		android:layout_alignParentTop="true"
+		android:orientation="vertical"
+		android:layout_marginBottom="65dp"
+		android:gravity="top|center">
 
-		<LinearLayout
+		<TextView
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_width="match_parent"
+			android:id="@+id/textview_chatinfo"/>
+
+		<View
+			android:background="?android:attr/dividerVertical"
+			android:layout_height="1dp"
+			android:layout_width="match_parent"/>
+
+		<ListView
 			android:layout_height="match_parent"
 			android:layout_width="match_parent"
-			android:orientation="vertical">
+			android:transcriptMode="alwaysScroll"
+			android:id="@+id/listview_chat"/>
 
-			<TextView
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:layout_width="match_parent"
-				android:id="@+id/textview_chatinfo"/>
-
-			<View
-				android:background="?android:attr/dividerVertical"
-				android:layout_height="1dp"
-				android:layout_width="match_parent"/>
-
-			<TextView
-				android:layout_height="match_parent"
-				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:layout_width="match_parent"
-				android:id="@+id/textview_chat"
-				android:textSize="15sp"/>
-
-		</LinearLayout>
-
-	</ScrollView>
+	</LinearLayout>
 
 	<LinearLayout
 		android:layout_height="wrap_content"
@@ -49,12 +42,10 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			android:ems="10"
-			android:imeOptions="actionSend"
 			android:id="@+id/edittext_send"
 			android:layout_weight="20.0"
 			android:textSize="15sp"
-			android:maxHeight="75dp"
-			android:inputType="text"/>
+			android:maxHeight="75dp"/>
 
 		<Button
 			android:layout_height="45dp"

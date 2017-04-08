@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.util.Scanner;
 import tool.xfy9326.chat.Methods.Config;
+import tool.xfy9326.chat.Methods.MessageMethod;
 import tool.xfy9326.chat.Tools.AES;
 
 //Socket服务处理线程
@@ -36,10 +37,13 @@ public class SocketServer extends Thread {
 					String tag = text.substring(0, text.indexOf("_") + 1);
 					Message message = new Message();
 					Bundle bundle = new Bundle();
-					bundle.putString("IP", socket.getInetAddress().toString());
-					bundle.putString("RESULT", text.substring(text.indexOf("_") + 1).toString());
+					String result = text.substring(text.indexOf("_") + 1).toString();
+					bundle.putString(Config.DATA_RECEIVE_IP, socket.getInetAddress().toString());
+					bundle.putString(Config.DATA_RECEIVE, result);
 					//分别处理信息
 					if (tag.equals(Config.MSG_TAG)) {
+						 String[] info = MessageMethod.msgScanner(result);
+						 bundle.putStringArray(Config.DATA_RECEIVE_INFO, info);
 						 message.what = Config.TYPE_MSG;
 					} else if (tag.equals(Config.USERLIST_TAG)) {
 						 message.what = Config.TYPE_USERLIST;
@@ -50,7 +54,13 @@ public class SocketServer extends Thread {
 					} else if (tag.equals(Config.ALERT_TAG)) {
 						 message.what = Config.TYPE_ALERT_USER;
 					} else if (tag.equals(Config.SECRET_TAG)) {
+						 String[] info = MessageMethod.msgScanner(result);
+						 bundle.putStringArray(Config.DATA_RECEIVE_INFO, info);
 						 message.what = Config.TYPE_SECRET_CHAT;
+					} else if (tag.equals(Config.SYSTEM_TAG)) {
+						 String[] info = MessageMethod.msgScanner(result);
+						 bundle.putStringArray(Config.DATA_RECEIVE_INFO, info);
+						 message.what = Config.TYPE_SYSTEM;
 					}
 					message.setData(bundle);
 					NetHandler.sendMessage(message);

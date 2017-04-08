@@ -5,6 +5,7 @@
 	<string name="done">确认</string>
 	<string name="submit">提交</string>
 	<string name="cancel">取消</string>
+	<string name="back_launcher">仅返回桌面</string>
 	<string name="attention">注意</string>
 	<string name="send">发送</string>
 	<string name="settings">设置</string>
@@ -15,9 +16,9 @@
 	<string name="ip_local">本地IP</string>
 	<string name="ip_server">服务器IP</string>
 	
-	<string name="msg_system">服务器信息</string>
+	<string name="msg_join">加入聊天室</string>
 	<string name="msg_welcome">欢迎使用聊（制作者 XFY9326）</string>
-	<string name="msg_close_app">你真的想要关闭它吗？</string>
+	<string name="msg_close_app">你真的想要关闭它吗？\n同时你将会离线。</string>
 	<string name="msg_serverip">如果你是服务端，请留空。</string>
 	
 	<string name="warn_server_notstart">服务器还没有启动</string>

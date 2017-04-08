@@ -2,7 +2,6 @@ package tool.xfy9326.chat.Net;
 
 import android.os.Handler;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
