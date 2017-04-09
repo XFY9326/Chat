@@ -362,25 +362,30 @@ public class ChatActivity extends Activity {
 					//屏蔽
 					if (originalCmd.length() > 9) {
 						 String blockmode = originalCmd.substring(cmd.length() + 1);
-						 if (blockmode.equalsIgnoreCase("del")) {
-							  blockmode = blockmode.substring(blockmode.length() + 1);
-							  blockmode = MessageMethod.fixIP(blockmode, this);
-							  if (NetWorkMethod.isIPCorrect(blockmode)) {
-								   if (!BlockIP.toString().contains(blockmode)) {
-										BlockIP.add(blockmode.trim());
+						 if (blockmode.contains(" ")) {
+							  blockmode = blockmode.substring(0, blockmode.indexOf(" "));
+							  if (blockmode.equalsIgnoreCase("add")) {
+								   String blockip = originalCmd.substring(cmd.length() + blockmode.length() + 2);
+								   blockip = MessageMethod.fixIP(blockip, this);
+								   if (NetWorkMethod.isIPCorrect(blockip)) {
+										if (!BlockIP.toString().contains(blockip)) {
+											 BlockIP.add(blockip.trim());
+											 pushText(null,blockip + getString(R.string.msg_block), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+										}
+								   } else {
+										ToastShow(R.string.err_ip_format);
 								   }
-							  } else {
-								   ToastShow(R.string.err_ip_format);
-							  }
-						 } else if (blockmode.equalsIgnoreCase("add")) {
-							  blockmode = blockmode.substring(blockmode.length() + 1);
-							  blockmode = MessageMethod.fixIP(blockmode, this);
-							  if (NetWorkMethod.isIPCorrect(blockmode)) {
-								   if (BlockIP.toString().contains(blockmode)) {
-										BlockIP.remove(blockmode.trim());
+							  } else if (blockmode.equalsIgnoreCase("del")) {
+								   String blockip = originalCmd.substring(cmd.length() + blockmode.length() + 2);
+								   blockip = MessageMethod.fixIP(blockip, this);
+								   if (NetWorkMethod.isIPCorrect(blockip)) {
+										if (BlockIP.toString().contains(blockip)) {
+											 BlockIP.remove(blockip.trim());
+											 pushText(null,blockip + getString(R.string.msg_unblock), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+										}
+								   } else {
+										ToastShow(R.string.err_ip_format);
 								   }
-							  } else {
-								   ToastShow(R.string.err_ip_format);
 							  }
 						 }
 					}

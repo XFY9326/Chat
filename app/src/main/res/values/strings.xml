@@ -16,6 +16,8 @@
 	<string name="ip_server">Server IP</string>
 	
 	<string name="msg_join">Join the ChatRoom</string>
+	<string name="msg_block"> is blocked</string>
+	<string name="msg_unblock"> is not blocked now</string>
 	<string name="msg_welcome">Welcome to ChatRoom (Made By XFY9326)</string>
 	<string name="msg_close_app">Do you really want to close it?\nYou will be offline too.</string>
 	<string name="msg_serverip">If you are the Server, please leave it empty.</string>
