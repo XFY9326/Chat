@@ -23,7 +23,10 @@
 		android:id="@+id/textview_chat_others_text"
 		android:layout_below="@id/textview_chat_others_name"
 		android:layout_alignParentLeft="true"
-		android:maxWidth="150dp"/>
+		android:maxWidth="150dp"
+		android:padding="10dp"
+		android:textSize="16sp"
+		android:background="@drawable/background_msg"/>
 
 	<TextView
 		android:layout_height="wrap_content"

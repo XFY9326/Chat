@@ -18,6 +18,7 @@
 			android:layout_width="match_parent"
 			android:transcriptMode="alwaysScroll"
 			android:id="@+id/listview_chat"
+			android:divider="@null"
 			android:padding="5dp"/>
 
 	</LinearLayout>
