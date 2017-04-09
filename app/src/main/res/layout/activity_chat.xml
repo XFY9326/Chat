@@ -2,14 +2,15 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="match_parent"
-	android:layout_width="match_parent">
+	android:layout_width="match_parent"
+	android:background="@color/colorChatBackground">
 
 	<LinearLayout
 		android:layout_height="match_parent"
 		android:layout_width="match_parent"
 		android:layout_alignParentTop="true"
 		android:orientation="vertical"
-		android:layout_marginBottom="65dp"
+		android:layout_marginBottom="50dp"
 		android:gravity="top|center">
 
 		<TextView
@@ -36,9 +37,8 @@
 		android:layout_width="match_parent"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
-		android:padding="5dp"
-		android:background="@color/colorSendtext"
-		android:gravity="center">
+		android:gravity="center"
+		android:paddingBottom="10dp">
 
 		<EditText
 			android:layout_height="wrap_content"
@@ -47,16 +47,19 @@
 			android:id="@+id/edittext_send"
 			android:layout_weight="20.0"
 			android:textSize="15sp"
-			android:maxHeight="75dp"/>
+			android:maxHeight="75dp"
+			android:background="@color/white"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="5dp"/>
 
 		<Button
 			android:layout_height="30dp"
 			android:layout_width="30dp"
 			android:layout_toRightOf="@id/edittext_send"
 			android:id="@+id/button_send"
-			android:layout_weight="1.0"
 			android:layout_marginLeft="5dp"
-			android:background="@drawable/ic_send"/>
+			android:background="@drawable/ic_send"
+			android:layout_marginRight="5dp"/>
 
 	</LinearLayout>
 
