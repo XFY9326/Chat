@@ -268,6 +268,8 @@ public class ChatActivity extends Activity {
 										if (NetWorkMethod.isIPCorrect(getip)) {
 											 RemoteIP.clear();
 											 RemoteIP.add(getip);
+											 mSpEditor.putString(Config.DATA_SERVERIP, getip);
+											 mSpEditor.apply();
 											 NetWorkClient.Send(getip, NetWorkMethod.getLocalIP(ChatActivity.this), Config.TYPE_ASK_USERLIST);
 											 pushText(null, getString(R.string.msg_join) + USERID, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 										} else {

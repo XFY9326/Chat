@@ -10,7 +10,7 @@
 		android:layout_width="match_parent"
 		android:layout_alignParentTop="true"
 		android:orientation="vertical"
-		android:layout_marginBottom="60dp"
+		android:layout_marginBottom="67dp"
 		android:gravity="top|center">
 
 		<ListView
@@ -35,10 +35,11 @@
 			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:gravity="center"
-			android:paddingBottom="5dp">
+			android:paddingBottom="5dp"
+			android:paddingTop="3dp">
 
 			<EditText
-				android:layout_height="wrap_content"
+				android:layout_height="30dp"
 				android:layout_width="wrap_content"
 				android:ems="10"
 				android:id="@+id/edittext_send"
