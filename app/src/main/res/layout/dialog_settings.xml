@@ -108,7 +108,6 @@
 			android:layout_width="match_parent"
 			android:ems="10"
 			android:id="@+id/edittext_serverip"
-			android:hint="@string/ip_server"
 			android:singleLine="true"/>
 
 	</LinearLayout>

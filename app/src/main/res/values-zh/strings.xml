@@ -15,7 +15,15 @@
 	<string name="ip_local">本地IP</string>
 	<string name="ip_server">服务器IP</string>
 	
-	<string name="msg_join">加入聊天室</string>
+	<string name="function_secretchat_title">私聊模式设置</string>
+	<string name="function_block_title">用户屏蔽设置</string>
+	<string name="function_block_add">屏蔽用户</string>
+	<string name="function_block_remove">移除屏蔽</string>
+	<string name="function_server_title">远程服务器重设</string>
+	<string name="function_info_title">服务器信息</string>
+	<string name="function_hint">在这里输入IP地址 (或用户 ID)</string>
+	
+	<string name="msg_join">加入聊天室 用户ID:</string>
 	<string name="msg_block"> 已被屏蔽</string>
 	<string name="msg_unblock"> 不再被屏蔽</string>
 	<string name="msg_welcome">欢迎使用聊（制作者 XFY9326）</string>

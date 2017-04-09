@@ -34,13 +34,13 @@ import tool.xfy9326.chat.View.ListViewAdapter;
 //主界面
 
 public class ChatActivity extends Activity {
+	 private String USERID;
 	 private String PassWord;
 	 private String User;
 	 private ArrayList<String> RemoteIP = new ArrayList<String>();
 	 private ArrayList<String> BlockIP = new ArrayList<String>();
 	 private int Port;
 	 private EditText sendtext;
-	 private TextView chatinfotext;
 	 private ListView chattext;
 	 private ListViewAdapter chatadapter;
 	 private SocketServerHandler NetWorkServer;
@@ -64,9 +64,8 @@ public class ChatActivity extends Activity {
 		  mSp = PreferenceManager.getDefaultSharedPreferences(this);
 		  mSpEditor = mSp.edit();
 		  ViewSet();
-		  pushInfoText(getString(R.string.msg_welcome));
-		  pushInfoText(getString(R.string.ip_local) + "> " + NetWorkMethod.getLocalIP(this));
 		  Settings();
+		  pushText(null, getString(R.string.msg_welcome), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 	 }
 
 	 //初始数据设置
@@ -79,6 +78,7 @@ public class ChatActivity extends Activity {
 		  porttext.setText(mSp.getString(Config.DATA_PORT, Config.DATA_DEFAULT_PORT));
 		  final EditText iptext = (EditText) layout.findViewById(R.id.edittext_serverip);
 		  iptext.setText(mSp.getString(Config.DATA_SERVERIP, NetWorkMethod.getLocalIP(this)));
+		  iptext.setHint(getString(R.string.ip_local) + " " +  NetWorkMethod.getLocalIP(this));
 		  final EditText pwtext = (EditText) layout.findViewById(R.id.edittext_password);
 		  pwtext.setText(mSp.getString(Config.DATA_PASSWORD, Config.DATA_DEFAULT_PASSWORD));
 		  AlertDialog.Builder set = new AlertDialog.Builder(this);
@@ -98,7 +98,8 @@ public class ChatActivity extends Activity {
 										if (!user.isEmpty() && !user.contains(">") && !user.contains("-") && !user.contains("_") && !user.contains("[") && !user.contains("]")) {
 											 if (!pw.isEmpty()) {
 												  String localnet = NetWorkMethod.getLocalIP(ChatActivity.this);
-												  User = user + " [" + localnet.substring(localnet.lastIndexOf(".") + 1) + "]";
+												  USERID = localnet.substring(localnet.lastIndexOf(".") + 1);
+												  User = user + " [" + USERID + "]";
 												  if (!ip.isEmpty()) {
 													   RemoteIP.add(ip);
 												  }
@@ -110,11 +111,9 @@ public class ChatActivity extends Activity {
 												  mSpEditor.putString(Config.DATA_SERVERIP, ip);
 												  mSpEditor.putString(Config.DATA_PASSWORD, pw);
 												  mSpEditor.apply();
-
-												  pushInfoText(getString(R.string.port) + "> " + port);
-												  pushInfoText(getString(R.string.username) + "> " + user);
+												  
 												  NetWorkSet();
-												  pushText(null, getString(R.string.msg_join), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+												  pushText(null, getString(R.string.msg_join) + USERID, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 											 } else {
 												  ToastShow(R.string.err_password);
 												  ChatActivity.this.Settings();
@@ -148,8 +147,8 @@ public class ChatActivity extends Activity {
 
 	 //布局设置
 	 private void ViewSet() {
+		  final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 		  sendtext = (EditText) findViewById(R.id.edittext_send);
-		  chatinfotext = (TextView) findViewById(R.id.textview_chatinfo);
 		  chattext = (ListView) findViewById(R.id.listview_chat);
 		  chatadapter = new ListViewAdapter(this, Types, Users, RemoteIP);
 		  chattext.setAdapter(chatadapter);
@@ -166,11 +165,143 @@ public class ChatActivity extends Activity {
 					}
 			   });
 		  NotifyBuilder = MessageMethod.getNotifyBuilder(this);
+		  //文字发送
 		  Button send = (Button) findViewById(R.id.button_send);
 		  send.setOnClickListener(new OnClickListener(){
 					@Override
 					public void onClick(View v) {
                          SendText();
+					}
+			   });
+		  //私聊模式
+		  Button chat = (Button) findViewById(R.id.button_chat);
+		  chat.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View v) {
+						 if (!secretChatMode) {
+							  AlertDialog.Builder chat = new AlertDialog.Builder(ChatActivity.this);
+							  View layout = inflater.inflate(R.layout.dialog_ipeditdialog, null);
+							  final EditText ip = (EditText) layout.findViewById(R.id.edittext_ipedit);
+							  ip.setHint(R.string.function_hint);
+							  chat.setTitle(R.string.function_secretchat_title);
+							  chat.setView(layout);
+							  chat.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface d, int i) {
+											 String secretip = ip.getText().toString();
+											 secretip =  MessageMethod.fixIP(secretip, ChatActivity.this);
+											 if (NetWorkMethod.isIPCorrect(secretip)) {
+												  pushText(User, getString(R.string.warn_secretmode_on) + " (" + secretip + ")", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+												  secretChatUser = secretip;
+												  secretChatMode = true;
+											 } else {
+												  ToastShow(R.string.err_ip_format);
+											 }
+										}
+								   });
+							  chat.setNegativeButton(R.string.cancel, null);
+							  chat.show();
+						 } else {
+							  pushText(User, getString(R.string.warn_secretmode_off), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+							  secretChatUser = "";
+							  secretChatMode = false;
+						 }
+					}
+			   });
+		  //用户屏蔽
+		  Button block = (Button) findViewById(R.id.button_block);
+		  block.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View v) {
+						 AlertDialog.Builder block = new AlertDialog.Builder(ChatActivity.this);
+						 View layout = inflater.inflate(R.layout.dialog_ipeditdialog, null);
+						 final EditText ip = (EditText) layout.findViewById(R.id.edittext_ipedit);
+						 block.setTitle(R.string.function_block_title);
+						 block.setView(layout);
+						 block.setPositiveButton(R.string.function_block_add, new DialogInterface.OnClickListener() {
+								   @Override
+								   public void onClick(DialogInterface d, int i) {
+										String blockip = MessageMethod.fixIP(ip.getText().toString(), ChatActivity.this);
+										if (NetWorkMethod.isIPCorrect(blockip)) {
+											 if (!BlockIP.toString().contains(blockip)) {
+												  BlockIP.add(blockip.trim());
+												  pushText(null, blockip + getString(R.string.msg_block), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+											 }
+										} else {
+											 ToastShow(R.string.err_ip_format);
+										}
+								   }
+							  });
+						 block.setNeutralButton(R.string.function_block_remove, new DialogInterface.OnClickListener() {
+								   @Override
+								   public void onClick(DialogInterface d, int i) {
+										String blockip = MessageMethod.fixIP(ip.getText().toString(), ChatActivity.this);
+										if (NetWorkMethod.isIPCorrect(blockip)) {
+											 if (BlockIP.toString().contains(blockip)) {
+												  BlockIP.remove(blockip.trim());
+												  pushText(null, blockip + getString(R.string.msg_unblock), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+											 }
+										} else {
+											 ToastShow(R.string.err_ip_format);
+										}
+								   }
+							  });
+						 block.setNegativeButton(R.string.cancel, null);
+						 block.show();
+					}
+			   });
+		  //服务重连
+		  Button server = (Button) findViewById(R.id.button_server);
+		  server.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View v) {
+						 AlertDialog.Builder server = new AlertDialog.Builder(ChatActivity.this);
+						 View layout = inflater.inflate(R.layout.dialog_ipeditdialog, null);
+						 final EditText ip = (EditText) layout.findViewById(R.id.edittext_ipedit);
+						 ip.setText(mSp.getString(Config.DATA_SERVERIP, NetWorkMethod.getLocalIP(ChatActivity.this)));
+						 server.setTitle(R.string.function_server_title);
+						 server.setView(layout);
+						 server.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+								   @Override
+								   public void onClick(DialogInterface d, int i) {
+										String getip = MessageMethod.fixIP(ip.getText().toString(), ChatActivity.this);
+										if (NetWorkMethod.isIPCorrect(getip)) {
+											 RemoteIP.clear();
+											 RemoteIP.add(getip);
+											 NetWorkClient.Send(getip, NetWorkMethod.getLocalIP(ChatActivity.this), Config.TYPE_ASK_USERLIST);
+											 pushText(null, getString(R.string.msg_join) + USERID, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
+										} else {
+											 ToastShow(R.string.err_ip_format);
+										}
+								   }
+							  });
+						 server.setNegativeButton(R.string.cancel, null);
+						 server.show();
+					}
+			   });
+		  //服务信息
+		  Button info = (Button) findViewById(R.id.button_info);
+		  info.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View v) {
+                         String info ="";
+						 if (NetWorkServer == null) {
+							  info = getString(R.string.warn_server_notstart);
+						 } else {
+							  info = "User Name: " + User + "\n"
+							       + "User ID: " + USERID + "\n"
+								   + "Remote IP: " + RemoteIP.toString() + "\n"
+								   + "User Count: " + getUserCount() + "\n"
+								   + "Local IP: " + NetWorkMethod.getLocalIP(ChatActivity.this) + "\n"
+								   + "Port: " + Port + "\n"
+								   + "PassWord: " + PassWord + "\n"
+								   + "Block IP: " + BlockIP.toString();
+						 }
+						 AlertDialog.Builder serverinfo = new AlertDialog.Builder(ChatActivity.this);
+						 serverinfo.setTitle(R.string.function_info_title);
+						 serverinfo.setMessage(info);
+						 serverinfo.setPositiveButton(R.string.done, null);
+						 serverinfo.show();
 					}
 			   });
 	 }
@@ -180,24 +311,19 @@ public class ChatActivity extends Activity {
 		  String str = sendtext.getText().toString().trim();
 		  if (!str.isEmpty()) {
 			   if (str.length() <= 500) {
-					if (str.startsWith("/")) {
-						 //命令
-						 CommandHandler(str.substring(1));
+					//信息
+					if (secretChatMode) {
+						 //私聊
+						 pushText(User, str, MessageMethod.getMsgTime(), Config.MSGTYPE_MAIN_SECRET);
+						 NetWorkClient.Send(secretChatUser, MessageMethod.msgBuilder(User, NetWorkMethod.getLocalIP(ChatActivity.this), str), Config.TYPE_SECRET_CHAT);
 					} else {
-						 //信息
-						 if (secretChatMode) {
-							  //私聊
-							  pushText(User, str, MessageMethod.getMsgTime(), Config.MSGTYPE_MAIN_SECRET);
-							  NetWorkClient.Send(secretChatUser, MessageMethod.msgBuilder(User, NetWorkMethod.getLocalIP(ChatActivity.this), str), Config.TYPE_SECRET_CHAT);
-						 } else {
-							  //正常发送
-							  if (str.contains("@")) {
-								   //提醒
-								   str = alertUser(str);
-							  }
-							  pushText(User, str, MessageMethod.getMsgTime(), Config.MSGTYPE_MAIN);
-							  msgSend(str);
+						 //正常发送
+						 if (str.contains("@")) {
+							  //提醒
+							  str = alertUser(str);
 						 }
+						 pushText(User, str, MessageMethod.getMsgTime(), Config.MSGTYPE_MAIN);
+						 msgSend(str);
 					}
 					sendtext.setText("");
 			   } else {
@@ -299,104 +425,6 @@ public class ChatActivity extends Activity {
 		  NetWorkClient.Send(RemoteIP, NetWorkMethod.getLocalIP(this), Config.TYPE_ASK_USERLIST);
 	 }
 
-	 //命令处理
-	 private void CommandHandler(String cmd) {
-		  String originalCmd = cmd;
-		  if (cmd.indexOf(" ") >= 0) {
-			   cmd = cmd.substring(0, cmd.indexOf(" "));
-		  }
-		  switch (cmd) {
-			   case "info":
-					//信息反馈
-					String info ="";
-					if (NetWorkServer == null) {
-						 info = getString(R.string.warn_server_notstart);
-					} else {
-						 info = "--- Server Info ---" + "\n"
-							  + "User Name: " + User + "\n"
-							  + "Remote IP: " + RemoteIP.toString() + "\n"
-							  + "User Count: " + getUserCount() + "\n"
-							  + "Local IP: " + NetWorkMethod.getLocalIP(this) + "\n"
-							  + "Port: " + Port + "\n"
-							  + "PassWord: " + PassWord + "\n"
-							  + "Block IP: " + BlockIP.toString() + "\n"
-							  + "--- End of List ---";
-					}
-					pushText(null, info, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM_INFO);
-					break;
-			   case "talk":
-					//私聊
-					if (originalCmd.length() > 5) {
-						 String secretmode = originalCmd.substring(cmd.length() + 1);
-						 if (secretmode.equalsIgnoreCase("off")) {
-							  pushText(User, getString(R.string.warn_secretmode_off), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
-							  secretChatUser = "";
-							  secretChatMode = false;
-						 } else {
-							  secretmode = MessageMethod.fixIP(secretmode, this);
-							  if (NetWorkMethod.isIPCorrect(secretmode)) {
-								   pushText(User, getString(R.string.warn_secretmode_on) + " (" + secretmode + ")", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
-								   secretChatUser = secretmode;
-								   secretChatMode = true;
-							  } else {
-								   ToastShow(R.string.err_ip_format);
-							  }
-						 }
-					}
-					break;
-			   case "connect":
-					//重连服务
-					if (originalCmd.length() > 8) {
-						 String ip = originalCmd.substring(cmd.length() + 1);
-						 ip = MessageMethod.fixIP(ip, this);
-						 if (NetWorkMethod.isIPCorrect(ip)) {
-							  RemoteIP.clear();
-							  RemoteIP.add(ip);
-							  NetWorkClient.Send(ip, NetWorkMethod.getLocalIP(this), Config.TYPE_ASK_USERLIST);
-						 } else {
-							  ToastShow(R.string.err_ip_format);
-						 }
-					}
-					break;
-			   case "block":
-					//屏蔽
-					if (originalCmd.length() > 9) {
-						 String blockmode = originalCmd.substring(cmd.length() + 1);
-						 if (blockmode.contains(" ")) {
-							  blockmode = blockmode.substring(0, blockmode.indexOf(" "));
-							  if (blockmode.equalsIgnoreCase("add")) {
-								   String blockip = originalCmd.substring(cmd.length() + blockmode.length() + 2);
-								   blockip = MessageMethod.fixIP(blockip, this);
-								   if (NetWorkMethod.isIPCorrect(blockip)) {
-										if (!BlockIP.toString().contains(blockip)) {
-											 BlockIP.add(blockip.trim());
-											 pushText(null,blockip + getString(R.string.msg_block), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
-										}
-								   } else {
-										ToastShow(R.string.err_ip_format);
-								   }
-							  } else if (blockmode.equalsIgnoreCase("del")) {
-								   String blockip = originalCmd.substring(cmd.length() + blockmode.length() + 2);
-								   blockip = MessageMethod.fixIP(blockip, this);
-								   if (NetWorkMethod.isIPCorrect(blockip)) {
-										if (BlockIP.toString().contains(blockip)) {
-											 BlockIP.remove(blockip.trim());
-											 pushText(null,blockip + getString(R.string.msg_unblock), MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
-										}
-								   } else {
-										ToastShow(R.string.err_ip_format);
-								   }
-							  }
-						 }
-					}
-					break;
-			   default:
-					//错误提示
-					pushText(null, getString(R.string.warn_unknown_command) + " '" + originalCmd + "'", MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
-					break;
-		  }
-	 }
-
 	 //网络检测与提示
 	 private boolean checkNetWorkServer() {
 		  if (NetWorkMethod.isWifiConnected(this)) {
@@ -416,17 +444,6 @@ public class ChatActivity extends Activity {
 		  }
 	 }
 
-	 //配置信息推送到UI显示
-	 private void pushInfoText(String str) {
-		  String old = chatinfotext.getText().toString();
-		  if (old == "") {
-			   chatinfotext.append(str);
-		  } else {
-			   String result = old + "\n" + str ;
-			   chatinfotext.setText(result);
-		  }
-	 }
-
 	 //聊天信息推送到UI显示
 	 private void pushText(String user, String str, String time, int type) {
 		  if (user == null) {
@@ -434,8 +451,6 @@ public class ChatActivity extends Activity {
 		  }
 		  if (type == Config.MSGTYPE_SYSTEM) {
 			   chatadapter.addSystemMessage(str, time, Config.COLOR_SYSTEM);
-		  } else if (type == Config.MSGTYPE_SYSTEM_INFO) {
-			   chatadapter.addSystemMessage(str, time, Config.COLOR_INFO);
 		  } else if (type == Config.MSGTYPE_MAIN) {
 			   chatadapter.addMainMessage(str, time, null);
 		  } else if (type == Config.MSGTYPE_MAIN_SECRET) {

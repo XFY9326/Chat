@@ -15,7 +15,15 @@
 	<string name="ip_local">Local IP</string>
 	<string name="ip_server">Server IP</string>
 	
-	<string name="msg_join">Join the ChatRoom</string>
+	<string name="function_secretchat_title">Secret Chat Setting</string>
+	<string name="function_block_title">Block User Setting</string>
+	<string name="function_block_add">Block User</string>
+	<string name="function_block_remove">Remove User</string>
+	<string name="function_server_title">Remote Server Reset</string>
+	<string name="function_info_title">Server Info</string>
+	<string name="function_hint">Enter IP Here (Or User ID)</string>
+	
+	<string name="msg_join">Join the ChatRoom  User ID:</string>
 	<string name="msg_block"> is blocked</string>
 	<string name="msg_unblock"> is not blocked now</string>
 	<string name="msg_welcome">Welcome to ChatRoom (Made By XFY9326)</string>

@@ -6,7 +6,6 @@ public class Config {
 	 public static String IP_LOCALHOST = "127.0.0.1";
 
 	 public static String COLOR_SYSTEM = "#E53935";
-	 public static String COLOR_INFO = "#66BB6A";
 	 public static String COLOR_ALERTUSER = "#FF9800";
 	 public static String COLOR_SECRETCHAT = "#87CEFA";
 
@@ -36,7 +35,6 @@ public class Config {
 	 public static int MSGTYPE_MAIN_SECRET = 2;
 	 public static int MSGTYPE_OTHERS_SECRET = 3;
 	 public static int MSGTYPE_SYSTEM = 4;
-	 public static int MSGTYPE_SYSTEM_INFO = 5;
 
 	 public static String MSGTYPE_SYSTEM_ONLINE = "ONLINE";
 
