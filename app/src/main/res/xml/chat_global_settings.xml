@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/settings_global"> 
+        <CheckBoxPreference 
+            android:key="BackgroundNotification"
+            android:title="@string/settings_notification"
+            android:summary="@string/settings_notification_describe"
+            android:defaultValue="true"
+        />
+	</PreferenceCategory>
+</PreferenceScreen>

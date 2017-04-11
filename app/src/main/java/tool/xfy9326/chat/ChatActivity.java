@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -305,6 +306,47 @@ public class ChatActivity extends Activity {
 					serverinfo.show();
 				}
 			});
+		//关闭应用
+		Button close = (Button) findViewById(R.id.button_close);
+		close.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					AlertDialog.Builder back = new AlertDialog.Builder(ChatActivity.this);
+					back.setTitle(R.string.attention);
+					back.setMessage(R.string.msg_close_app);
+					back.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface d, int i) {
+								unregisterServer();
+								CloseApp(false);
+								CloseSocketClientConnect();
+								new Handler().postDelayed(new Runnable(){
+										@Override
+										public void run() {
+											CloseSocketServerConnect();
+										}
+									}, 800);
+								d.dismiss();
+							}
+						});
+					back.setNeutralButton(R.string.back_launcher, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface d, int i) {
+								CloseApp(true);
+							}
+						});
+					back.setNegativeButton(R.string.cancel, null);
+					back.show();
+				}
+			});
+		//设置
+		Button settings = (Button) findViewById(R.id.button_settings);
+		settings.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(ChatActivity.this, ChatSettings.class);
+					startActivity(intent);
+				}
+			});
 	}
 
 	//发送输入的文字
@@ -462,9 +504,11 @@ public class ChatActivity extends Activity {
 			chatadapter.addOthersMessage(user, str, time, Config.COLOR_SECRETCHAT);
 		}
 		//应用不在前台时通知栏提示
-		if (!SystemMethod.isTopActivity(ChatActivity.this, getPackageName())) {
-			NoReadNum ++;
-			MessageMethod.NotifyMsg(ChatActivity.this, str, NotifyBuilder, NoReadNum);
+		if (mSp.getBoolean(Config.DATA_BACKGROUND_NOTIFICATION, true)) {
+			if (!SystemMethod.isTopActivity(ChatActivity.this, getPackageName())) {
+				NoReadNum ++;
+				MessageMethod.NotifyMsg(ChatActivity.this, str, NotifyBuilder, NoReadNum);
+			}
 		}
 	}
 
@@ -569,30 +613,6 @@ public class ChatActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		AlertDialog.Builder back = new AlertDialog.Builder(this);
-		back.setTitle(R.string.attention);
-		back.setMessage(R.string.msg_close_app);
-		back.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface d, int i) {
-					unregisterServer();
-					CloseApp(false);
-					CloseSocketClientConnect();
-					new Handler().postDelayed(new Runnable(){
-							@Override
-							public void run() {
-								CloseSocketServerConnect();
-							}
-						}, 800);
-					d.dismiss();
-				}
-			});
-		back.setNeutralButton(R.string.back_launcher, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface d, int i) {
-					CloseApp(true);
-				}
-			});
-		back.setNegativeButton(R.string.cancel, null);
-		back.show();
+		moveTaskToBack(true);
 	}
 }

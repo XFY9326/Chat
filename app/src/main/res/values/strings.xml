@@ -50,4 +50,8 @@
 	<string name="err_username">User Name Error!</string>
 	<string name="err_password">PassWord Error!</string>
 	
+	<string name="settings_global">Global Settings</string>
+	<string name="settings_notification">Show Notification</string>
+	<string name="settings_notification_describe">Show Notification when receive messages and running in background</string>
+	
 </resources>
