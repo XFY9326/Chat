@@ -17,7 +17,10 @@
 	<string name="user_count">User Count</string>
 	<string name="block_ip">Blocked IP</string>
 	<string name="user_id">User ID</string>
-	
+	<string name="author">Author XFY9326</string>
+	<string name="app_license">Open Source License GNU 3.0</string>
+	<string name="app_url">URL: https://github.com/XFY9326/Chat</string>
+
 	<string name="function_secretchat_title">Secret Chat Setting</string>
 	<string name="function_block_title">Block User Setting</string>
 	<string name="function_block_add">Block User</string>
@@ -25,21 +28,21 @@
 	<string name="function_server_title">Remote Server Reset</string>
 	<string name="function_info_title">Server Info</string>
 	<string name="function_hint">Enter IP Here (Or User ID)</string>
-	
+
 	<string name="msg_join">Join the ChatRoom  User ID:</string>
 	<string name="msg_block"> is blocked</string>
 	<string name="msg_unblock"> is not blocked now</string>
-	<string name="msg_welcome">Welcome to ChatRoom (Made By XFY9326)</string>
+	<string name="msg_welcome">Welcome to ChatRoom</string>
 	<string name="msg_close_app">Do you really want to close it?\nYou will be offline too.</string>
 	<string name="msg_serverip">If you are the Server, please leave it empty.</string>
-	
+
 	<string name="warn_server_notstart">Server has not start yet</string>
 	<string name="warn_secretmode_on">Secret Mode is On</string>
 	<string name="warn_secretmode_off">Secret Mode is Off</string>
 	<string name="warn_unknown_command">Unknown Command</string>
 	<string name="warn_online">is online now</string>
 	<string name="warn_offline">is offline now</string>
-	
+
 	<string name="err_wifi_connect">Wifi Connect Error!</string>
 	<string name="err_vpn_connect">You must close VPN!</string>
 	<string name="err_moblie_connect">We do not support mobile network!</string>
@@ -52,10 +55,11 @@
 	<string name="err_port_used">This Port has been used!\nClose this app completely may solve it.</string>
 	<string name="err_username">User Name Error!</string>
 	<string name="err_password">PassWord Error!</string>
-	
+
 	<string name="settings_global">Global Settings</string>
 	<string name="settings_notification">Show notification</string>
 	<string name="settings_notification_describe">Show notification when receive messages and running in background</string>
 	<string name="settings_alert">Allow message alert</string>
 	<string name="settings_alert_describe">Play sound and vibrate when different messages come</string>
+	<string name="settings_about">About us</string>
 </resources>

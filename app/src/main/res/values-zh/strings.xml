@@ -17,6 +17,9 @@
 	<string name="user_count">用户数量</string>
 	<string name="block_ip">已被屏蔽的IP</string>
 	<string name="user_id">用户ID</string>
+	<string name="author">作者 XFY9326</string>
+	<string name="app_license">开源协议 GNU 3.0</string>
+	<string name="app_url">开源地址 https://github.com/XFY9326/Chat</string>
 	
 	<string name="function_secretchat_title">私聊模式设置</string>
 	<string name="function_block_title">用户屏蔽设置</string>
@@ -29,7 +32,7 @@
 	<string name="msg_join">加入聊天室 用户ID:</string>
 	<string name="msg_block"> 已被屏蔽</string>
 	<string name="msg_unblock"> 不再被屏蔽</string>
-	<string name="msg_welcome">欢迎使用聊（制作者 XFY9326）</string>
+	<string name="msg_welcome">欢迎使用聊</string>
 	<string name="msg_close_app">你真的想要关闭它吗？\n同时你将会离线。</string>
 	<string name="msg_serverip">如果你是服务端，请留空。</string>
 	
@@ -58,4 +61,5 @@
 	<string name="settings_notification_describe">在后台运行时接收消息显示为通知</string>
 	<string name="settings_alert">允许信息提示音</string>
 	<string name="settings_alert_describe">当收到不同信息时播放提示音并且振动</string>
+	<string name="settings_about">关于应用</string>
 </resources>

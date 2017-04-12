@@ -15,4 +15,13 @@
             android:defaultValue="true"
         />
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/settings_about"> 
+		<Preference 
+            android:title="@string/app_license"
+			android:summary="@string/app_url"
+        />
+		<Preference 
+            android:title="@string/author"
+        />
+	</PreferenceCategory>
 </PreferenceScreen>
