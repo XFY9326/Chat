@@ -14,6 +14,9 @@
 	<string name="password">密码</string>
 	<string name="ip_local">本地IP</string>
 	<string name="ip_server">服务器IP</string>
+	<string name="user_count">用户数量</string>
+	<string name="block_ip">已被屏蔽的IP</string>
+	<string name="user_id">用户ID</string>
 	
 	<string name="function_secretchat_title">私聊模式设置</string>
 	<string name="function_block_title">用户屏蔽设置</string>
@@ -53,5 +56,6 @@
 	<string name="settings_global">通用设置</string>
 	<string name="settings_notification">显示通知</string>
 	<string name="settings_notification_describe">在后台运行时接收消息显示为通知</string>
-	
+	<string name="settings_alert">允许信息提示音</string>
+	<string name="settings_alert_describe">当收到不同信息时播放提示音并且振动</string>
 </resources>

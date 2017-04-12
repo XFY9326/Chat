@@ -10,5 +10,5 @@ public class ChatSettings extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.chat_global_settings);
 	}
-	
+
 }

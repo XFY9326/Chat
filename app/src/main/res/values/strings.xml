@@ -14,6 +14,9 @@
 	<string name="password">PassWord</string>
 	<string name="ip_local">Local IP</string>
 	<string name="ip_server">Server IP</string>
+	<string name="user_count">User Count</string>
+	<string name="block_ip">Blocked IP</string>
+	<string name="user_id">User ID</string>
 	
 	<string name="function_secretchat_title">Secret Chat Setting</string>
 	<string name="function_block_title">Block User Setting</string>
@@ -51,7 +54,8 @@
 	<string name="err_password">PassWord Error!</string>
 	
 	<string name="settings_global">Global Settings</string>
-	<string name="settings_notification">Show Notification</string>
-	<string name="settings_notification_describe">Show Notification when receive messages and running in background</string>
-	
+	<string name="settings_notification">Show notification</string>
+	<string name="settings_notification_describe">Show notification when receive messages and running in background</string>
+	<string name="settings_alert">Allow message alert</string>
+	<string name="settings_alert_describe">Play sound and vibrate when different messages come</string>
 </resources>

@@ -8,5 +8,11 @@
             android:summary="@string/settings_notification_describe"
             android:defaultValue="true"
         />
+		<CheckBoxPreference 
+            android:key="MessageAlert"
+            android:title="@string/settings_alert"
+            android:summary="@string/settings_alert_describe"
+            android:defaultValue="true"
+        />
 	</PreferenceCategory>
 </PreferenceScreen>

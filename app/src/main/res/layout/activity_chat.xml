@@ -10,7 +10,7 @@
 		android:layout_width="match_parent"
 		android:layout_alignParentTop="true"
 		android:orientation="vertical"
-		android:layout_marginBottom="67dp"
+		android:layout_marginBottom="70dp"
 		android:gravity="top|center">
 
 		<ListView
@@ -53,7 +53,7 @@
 
 			<Button
 				android:layout_height="30dp"
-				android:layout_width="30dp"
+				android:layout_width="32dp"
 				android:layout_toRightOf="@id/edittext_send"
 				android:id="@+id/button_send"
 				android:layout_marginLeft="5dp"
@@ -77,8 +77,8 @@
 				android:gravity="center">
 
 				<Button
-					android:layout_height="25dp"
-					android:layout_width="25dp"
+					android:layout_height="27dp"
+					android:layout_width="27dp"
 					android:background="@drawable/ic_comment_account_outline"
 					android:id="@+id/button_chat"/>
 
@@ -92,8 +92,8 @@
 				android:gravity="center">
 
 				<Button
-					android:layout_height="25dp"
-					android:layout_width="25dp"
+					android:layout_height="27dp"
+					android:layout_width="27dp"
 					android:background="@drawable/ic_account_remove"
 					android:id="@+id/button_block"/>
 
@@ -107,8 +107,8 @@
 				android:gravity="center">
 
 				<Button
-					android:layout_height="25dp"
-					android:layout_width="25dp"
+					android:layout_height="27dp"
+					android:layout_width="27dp"
 					android:background="@drawable/ic_server_network"
 					android:id="@+id/button_server"/>
 
@@ -122,13 +122,13 @@
 				android:gravity="center">
 
 				<Button
-					android:layout_height="25dp"
-					android:layout_width="25dp"
+					android:layout_height="27dp"
+					android:layout_width="27dp"
 					android:background="@drawable/ic_information"
 					android:id="@+id/button_info"/>
 
 			</LinearLayout>
-			
+
 			<LinearLayout
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
@@ -137,8 +137,8 @@
 				android:gravity="center">
 
 				<Button
-					android:layout_height="25dp"
-					android:layout_width="25dp"
+					android:layout_height="27dp"
+					android:layout_width="27dp"
 					android:background="@drawable/ic_close_circle_outline"
 					android:id="@+id/button_close"/>
 
@@ -152,8 +152,8 @@
 				android:gravity="center">
 
 				<Button
-					android:layout_height="25dp"
-					android:layout_width="25dp"
+					android:layout_height="27dp"
+					android:layout_width="27dp"
 					android:background="@drawable/ic_cog"
 					android:id="@+id/button_settings"/>
 

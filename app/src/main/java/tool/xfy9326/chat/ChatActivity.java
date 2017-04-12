@@ -92,47 +92,24 @@ public class ChatActivity extends Activity {
 					String user = usertext.getText().toString();
 					String port = porttext.getText().toString();
 					String pw = pwtext.getText().toString();
-					if (NetWorkMethod.isIPCorrect(ip)) {
-						if (!port.isEmpty() && Integer.valueOf(port) >= 5000 && Integer.valueOf(port) <= 60000) {
-							if (!NetWorkMethod.isPortUsed(Integer.valueOf(port))) {
-								if (!user.isEmpty() && !user.contains(">") && !user.contains("-") && !user.contains("_") && !user.contains("[") && !user.contains("]")) {
-									if (!pw.isEmpty()) {
-										String localnet = NetWorkMethod.getLocalIP(ChatActivity.this);
-										USERID = localnet.substring(localnet.lastIndexOf(".") + 1);
-										User = user + " [" + USERID + "]";
-										if (!ip.isEmpty()) {
-											RemoteIP.add(ip);
-										}
-										Port = Integer.valueOf(port);
-										PassWord = pw;
-
-										mSpEditor.putString(Config.DATA_USERNAME, user);
-										mSpEditor.putString(Config.DATA_PORT, port);
-										mSpEditor.putString(Config.DATA_SERVERIP, ip);
-										mSpEditor.putString(Config.DATA_PASSWORD, pw);
-										mSpEditor.apply();
-
-										NetWorkSet();
-										pushText(null, getString(R.string.msg_join) + USERID, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
-									} else {
-										ToastShow(R.string.err_password);
-										ChatActivity.this.Settings();
-									}
-								} else {
-									ToastShow(R.string.err_username);
-									ChatActivity.this.Settings();
-								}
-							} else {
-								ToastShow(R.string.err_port_used);
-								ChatActivity.this.Settings();
-							}
-						} else {
-							ToastShow(R.string.err_server_port);
-							ChatActivity.this.Settings();
+					if (DataCheck(ip, user, pw, port)) {
+						String localnet = NetWorkMethod.getLocalIP(ChatActivity.this);
+						USERID = localnet.substring(localnet.lastIndexOf(".") + 1);
+						User = user + " [" + USERID + "]";
+						if (!ip.isEmpty()) {
+							RemoteIP.add(ip);
 						}
-					} else {
-						ToastShow(R.string.err_server_ip);
-						ChatActivity.this.Settings();
+						Port = Integer.valueOf(port);
+						PassWord = pw;
+
+						mSpEditor.putString(Config.DATA_USERNAME, user);
+						mSpEditor.putString(Config.DATA_PORT, port);
+						mSpEditor.putString(Config.DATA_SERVERIP, ip);
+						mSpEditor.putString(Config.DATA_PASSWORD, pw);
+						mSpEditor.apply();
+
+						NetWorkSet();
+						pushText(null, getString(R.string.msg_join) + USERID, MessageMethod.getMsgTime(), Config.MSGTYPE_SYSTEM);
 					}
 				}
 			});
@@ -143,6 +120,37 @@ public class ChatActivity extends Activity {
 				}
 			});
 		set.show();
+	}
+
+	//数据检测
+	private boolean DataCheck(String ip, String user, String pw, String port) {
+		if (NetWorkMethod.isIPCorrect(ip)) {
+			if (!port.isEmpty() && Integer.valueOf(port) >= 5000 && Integer.valueOf(port) <= 60000) {
+				if (!NetWorkMethod.isPortUsed(Integer.valueOf(port))) {
+					if (!user.isEmpty() && !user.contains(">") && !user.contains("-") && !user.contains("_") && !user.contains("[") && !user.contains("]")) {
+						if (!pw.isEmpty()) {
+							return true;
+						} else {
+							ToastShow(R.string.err_password);
+							ChatActivity.this.Settings();
+						}
+					} else {
+						ToastShow(R.string.err_username);
+						ChatActivity.this.Settings();
+					}
+				} else {
+					ToastShow(R.string.err_port_used);
+					ChatActivity.this.Settings();
+				}
+			} else {
+				ToastShow(R.string.err_server_port);
+				ChatActivity.this.Settings();
+			}
+		} else {
+			ToastShow(R.string.err_server_ip);
+			ChatActivity.this.Settings();
+		}
+		return false;
 	}
 
 	//布局设置
@@ -290,14 +298,14 @@ public class ChatActivity extends Activity {
 					if (NetWorkServer == null) {
 						info = getString(R.string.warn_server_notstart);
 					} else {
-						info = "User Name: " + User + "\n"
-							+ "User ID: " + USERID + "\n"
-							+ "Remote IP: " + RemoteIP.toString() + "\n"
-							+ "User Count: " + getUserCount() + "\n"
-							+ "Local IP: " + NetWorkMethod.getLocalIP(ChatActivity.this) + "\n"
-							+ "Port: " + Port + "\n"
-							+ "PassWord: " + PassWord + "\n"
-							+ "Block IP: " + BlockIP.toString();
+						info = getString(R.string.username) + ": " + User + "\n"
+							+ getString(R.string.ip_server) + ": " + RemoteIP.toString() + "\n"
+							+ getString(R.string.user_id) + ": " + USERID + "\n"
+							+ getString(R.string.user_count) + ": " + getUserCount() + "\n"
+							+ getString(R.string.ip_local) +  ": " + NetWorkMethod.getLocalIP(ChatActivity.this) + "\n"
+							+ getString(R.string.port) + ": " + Port + "\n"
+							+ getString(R.string.password) + ": " + PassWord + "\n"
+							+ getString(R.string.block_ip) + ": " + BlockIP.toString();
 					}
 					AlertDialog.Builder serverinfo = new AlertDialog.Builder(ChatActivity.this);
 					serverinfo.setTitle(R.string.function_info_title);
@@ -500,8 +508,14 @@ public class ChatActivity extends Activity {
 			chatadapter.addMainMessage(str, time, Config.COLOR_SECRETCHAT);
 		} else if (type == Config.MSGTYPE_OTHERS) {
 			chatadapter.addOthersMessage(user, str, time, null);
+			if (mSp.getBoolean(Config.DATA_MESSAGE_ALERT, true)) {
+				SystemMethod.playMsgSound(this);
+			}
 		} else if (type == Config.MSGTYPE_OTHERS_SECRET) {
 			chatadapter.addOthersMessage(user, str, time, Config.COLOR_SECRETCHAT);
+			if (mSp.getBoolean(Config.DATA_MESSAGE_ALERT, true)) {
+				SystemMethod.playMsgSound(this);
+			}
 		}
 		//应用不在前台时通知栏提示
 		if (mSp.getBoolean(Config.DATA_BACKGROUND_NOTIFICATION, true)) {
@@ -537,11 +551,6 @@ public class ChatActivity extends Activity {
 		}
 	}
 
-	//是否有用户
-	private boolean hasUser(String ip) {
-		return RemoteIP.contains(ip.trim());
-	}
-
 	//提醒用户
 	private String alertUser(String str) {
 		Pattern pat = Pattern.compile("(\\@)(\\S+)");
@@ -553,8 +562,10 @@ public class ChatActivity extends Activity {
 				String get = originget.substring(1).trim();
 				if (!get.contains("@")) {
 					get = MessageMethod.fixIP(get, ChatActivity.this);
-					if (NetWorkMethod.isIPCorrect(get) && hasUser(get)) {
-						alert.add(get);
+					if (NetWorkMethod.isIPCorrect(get) && RemoteIP.toString().contains(get.trim())) {
+						if (mSp.getBoolean(Config.DATA_MESSAGE_ALERT, true)) {
+							alert.add(get);
+						}
 					}
 				}
 			}

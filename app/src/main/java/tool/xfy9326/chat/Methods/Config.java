@@ -14,6 +14,7 @@ public class Config {
 	public static String DATA_PASSWORD = "PassWord";
 	public static String DATA_SERVERIP = "RemoteIP";
 	public static String DATA_BACKGROUND_NOTIFICATION = "BackgroundNotification";
+	public static String DATA_MESSAGE_ALERT = "MessageAlert";
 
 	public static String DATA_DEFAULT_USERNAME = "User";
 	public static String DATA_DEFAULT_PORT = "51030";
