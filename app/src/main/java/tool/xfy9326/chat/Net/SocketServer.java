@@ -77,6 +77,8 @@ public class SocketServer extends Thread {
 	private void CloseConnect() {
 		if (isClientClosed()) {
 			try {
+				socket.shutdownInput();
+				socket.shutdownOutput();
 				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();

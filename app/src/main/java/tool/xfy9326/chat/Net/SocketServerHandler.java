@@ -66,6 +66,7 @@ public class SocketServerHandler extends Thread {
 			if (Server != null && executor != null) {
 				if (!executor.isShutdown()) {
 					executor.shutdown();
+					socket = null;
 				}
 				if (executor.isTerminated()) {
 					if (!Server.isClosed()) {

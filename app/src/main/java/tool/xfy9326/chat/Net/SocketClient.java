@@ -26,12 +26,12 @@ public class SocketClient extends Thread {
 		OutputStream socketOut = null;
 		try {
 			socket.connect(new InetSocketAddress(IP, Port), 2000);
-
 			socketOut = socket.getOutputStream();
 			socketOut.write(AES.encrypt(Text, PassWord).toString().getBytes("UTF-8"));
 			socketOut.flush();
-
 			socketOut.close();
+			socket.shutdownOutput();
+			socket.shutdownInput();
 			socket.close();
 		} catch (Exception e) {
 			if (!socket.isClosed()) {

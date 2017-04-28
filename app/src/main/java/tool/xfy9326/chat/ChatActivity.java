@@ -274,6 +274,7 @@ public class ChatActivity extends Activity {
 							public void onClick(DialogInterface d, int i) {
 								String getip = MessageMethod.fixIP(ip.getText().toString(), ChatActivity.this);
 								if (NetWorkMethod.isIPCorrect(getip)) {
+									unregisterServer();
 									RemoteIP.clear();
 									RemoteIP.add(getip);
 									mSpEditor.putString(Config.DATA_SERVERIP, getip);
@@ -478,6 +479,9 @@ public class ChatActivity extends Activity {
 
 	//网络检测与提示
 	private boolean checkNetWorkServer() {
+		if (RemoteIP.get(0).equals(Config.IP_LOCALHOST)) {
+			return true;
+		}
 		if (NetWorkMethod.isWifiConnected(this)) {
 			if (NetWorkMethod.isVpnUsed()) {
 				ToastShow(R.string.err_vpn_connect);
@@ -518,7 +522,7 @@ public class ChatActivity extends Activity {
 			}
 		}
 		//应用不在前台时通知栏提示
-		if (mSp.getBoolean(Config.DATA_BACKGROUND_NOTIFICATION, true)) {
+		if (ServerRegistered && mSp.getBoolean(Config.DATA_BACKGROUND_NOTIFICATION, true)) {
 			if (!SystemMethod.isTopActivity(ChatActivity.this, getPackageName())) {
 				NoReadNum ++;
 				MessageMethod.NotifyMsg(ChatActivity.this, str, NotifyBuilder, NoReadNum);
@@ -603,7 +607,10 @@ public class ChatActivity extends Activity {
 
 	//离线同步删除本机IP
 	private void unregisterServer() {
-		NetWorkClient.Send(RemoteIP, User + "-" + NetWorkMethod.getLocalIP(this), Config.TYPE_RELOAD_USERLIST);
+		if (ServerRegistered) {
+			ServerRegistered = false;
+			NetWorkClient.Send(RemoteIP, User + "-" + NetWorkMethod.getLocalIP(this), Config.TYPE_RELOAD_USERLIST);
+		}
 	}
 
 	//退出
@@ -612,6 +619,7 @@ public class ChatActivity extends Activity {
 			moveTaskToBack(true);
 		} else {
 			ChatActivity.this.finish();
+			System.gc();
 		}
 	}
 

@@ -47,26 +47,26 @@ public class MessageMethod {
 		return notification;
 	}
 
-	//提醒高亮处理
+	//提醒高亮
 	public static SpannableString alertHighLight(Context ctx, String text, ArrayList<String> IP) {
 		SpannableString sp = new SpannableString(text);
-		Pattern pat = Pattern.compile("(\\@)(\\S+)");
-		Matcher mat = pat.matcher(text);
-		while (mat.find()) {
-			String originget = mat.group(0).toString();
+		Pattern pat_alert = Pattern.compile("(\\@)(\\S+)");
+		Matcher mat_alert = pat_alert.matcher(sp.toString());
+		while (mat_alert.find()) {
+			String originget = mat_alert.group(0).toString();
 			if (!originget.isEmpty() && originget != " ") {
 				String get = originget.substring(1).trim();
 				if (!get.contains("@")) {
 					get = MessageMethod.fixIP(get, ctx);
 					if (NetWorkMethod.isIPCorrect(get) && IP.toString().contains(get) || get.equalsIgnoreCase(NetWorkMethod.getLocalIP(ctx))) {
-						sp.setSpan(new ForegroundColorSpan(Color.parseColor(Config.COLOR_ALERTUSER)), mat.start(), mat.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+						sp.setSpan(new ForegroundColorSpan(Color.parseColor(Config.COLOR_ALERTUSER)), mat_alert.start(), mat_alert.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 					}
 				}
 			}
 		}
 		return sp;
 	}
-
+	
 	//接收信息处理
 	public static String[] msgScanner(String text) {
 		String time = text.substring(0, text.indexOf(">"));
