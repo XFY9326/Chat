@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen 
-    xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="@string/settings_global"> 
-        <CheckBoxPreference 
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_global">
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="BackgroundNotification"
-            android:title="@string/settings_notification"
             android:summary="@string/settings_notification_describe"
+            android:title="@string/settings_notification" />
+        <CheckBoxPreference
             android:defaultValue="true"
-        />
-		<CheckBoxPreference 
             android:key="MessageAlert"
-            android:title="@string/settings_alert"
             android:summary="@string/settings_alert_describe"
-            android:defaultValue="true"
-        />
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/settings_about"> 
-		<Preference 
-            android:title="@string/app_license"
-			android:summary="@string/app_url"
-        />
-		<Preference 
-            android:title="@string/author"
-        />
-	</PreferenceCategory>
+            android:title="@string/settings_alert" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_about">
+        <Preference
+            android:summary="@string/app_url"
+            android:title="@string/app_license" />
+        <Preference android:title="@string/author" />
+    </PreferenceCategory>
 </PreferenceScreen>

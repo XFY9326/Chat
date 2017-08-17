@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content"
-	android:layout_width="match_parent"
-	android:padding="7dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="7dp">
 
-	<TextView
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="wrap_content"
-		android:id="@+id/textview_chat_others_name"
-		android:textSize="10sp"
-		android:gravity="center"
-		android:layout_marginBottom="2dp"
-		android:layout_alignParentLeft="true"
-		android:layout_marginRight="3dp"/>
+    <TextView
+        android:id="@+id/textview_chat_others_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="3dp"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp" />
 
-	<TextView
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:layout_width="wrap_content"
-		android:id="@+id/textview_chat_others_text"
-		android:layout_below="@id/textview_chat_others_name"
-		android:layout_alignParentLeft="true"
-		android:maxWidth="150dp"
-		android:padding="10dp"
-		android:textSize="16sp"
-		android:autoLink="web"
-		android:background="@drawable/background_msg"/>
+    <TextView
+        android:id="@+id/textview_chat_others_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/textview_chat_others_name"
+        android:autoLink="web"
+        android:background="@drawable/background_msg"
+        android:maxWidth="150dp"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
 
-	<TextView
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="wrap_content"
-		android:layout_toRightOf="@id/textview_chat_others_name"
-		android:textSize="10sp"
-		android:gravity="center"
-		android:id="@+id/textview_chat_others_time"/>
+    <TextView
+        android:id="@+id/textview_chat_others_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/textview_chat_others_name"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp" />
 
 </RelativeLayout>
 

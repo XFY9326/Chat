@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:orientation="vertical"
-	android:padding="20dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
 
-	<EditText
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:ems="10"
-		android:id="@+id/edittext_ipedit"
-		android:hint="@string/function_hint"/>
+    <EditText
+        android:id="@+id/edittext_ipedit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/function_hint" />
 
 </LinearLayout>
 

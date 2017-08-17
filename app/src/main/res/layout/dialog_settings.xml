@@ -1,123 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content"
-	android:layout_width="wrap_content"
-	android:orientation="vertical"
-	android:padding="8dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="left|center"
-		android:layout_marginBottom="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="start|center"
+        android:orientation="horizontal">
 
-		<TextView
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_width="wrap_content"
-			android:text="@string/username"
-			android:layout_marginRight="7dp"
-			android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:text="@string/username"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp" />
 
-		<EditText
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:ems="10"
-			android:id="@+id/edittext_username"
-			android:hint="@string/username"
-			android:singleLine="true"/>
+        <EditText
+            android:id="@+id/edittext_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/username"
+            android:maxLines="1" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="left|center"
-		android:layout_marginBottom="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="start|center"
+        android:orientation="horizontal">
 
-		<TextView
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_width="wrap_content"
-			android:text="@string/port"
-			android:layout_marginRight="7dp"
-			android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:text="@string/port"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp" />
 
-		<EditText
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:ems="10"
-			android:id="@+id/edittext_port"
-			android:inputType="number"
-			android:hint="@string/port_hint"
-			android:singleLine="true"/>
+        <EditText
+            android:id="@+id/edittext_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/port_hint"
+            android:inputType="number"
+            android:maxLines="1" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="left|center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:orientation="horizontal">
 
-		<TextView
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_width="wrap_content"
-			android:text="@string/password"
-			android:layout_marginRight="7dp"
-			android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:text="@string/password"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp" />
 
-		<EditText
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:ems="10"
-			android:id="@+id/edittext_password"
-			android:inputType="numberPassword"
-			android:hint="@string/password"
-			android:singleLine="true"/>
+        <EditText
+            android:id="@+id/edittext_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="numberPassword"
+            android:maxLines="1" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<View
-		android:background="?android:attr/dividerVertical"
-		android:layout_height="2dp"
-		android:layout_width="match_parent"
-		android:layout_marginTop="2dp"
-		android:layout_marginBottom="2dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:background="?android:attr/dividerVertical" />
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="left|center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:orientation="horizontal">
 
-		<TextView
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_width="wrap_content"
-			android:text="@string/ip_server"
-			android:layout_marginRight="7dp"
-			android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:text="@string/ip_server"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp" />
 
-		<EditText
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:ems="10"
-			android:id="@+id/edittext_serverip"
-			android:singleLine="true"/>
+        <EditText
+            android:id="@+id/edittext_serverip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:labelFor="@+id/edittext_serverip"
+            android:maxLines="1" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<TextView
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="match_parent"
-		android:text="@string/msg_serverip"
-		android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/msg_serverip"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>
 

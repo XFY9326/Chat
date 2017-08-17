@@ -1,167 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent"
-	android:background="@color/colorChatBackground">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorChatBackground">
 
-	<LinearLayout
-		android:layout_height="match_parent"
-		android:layout_width="match_parent"
-		android:layout_alignParentTop="true"
-		android:orientation="vertical"
-		android:layout_marginBottom="70dp"
-		android:gravity="top|center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="70dp"
+        android:gravity="top|center"
+        android:orientation="vertical">
 
-		<ListView
-			android:layout_height="match_parent"
-			android:layout_width="match_parent"
-			android:transcriptMode="alwaysScroll"
-			android:id="@+id/listview_chat"
-			android:divider="@null"
-			android:padding="5dp"/>
+        <ListView
+            android:id="@+id/listview_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:padding="5dp"
+            android:transcriptMode="alwaysScroll" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<LinearLayout
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:layout_alignParentBottom="true"
-		android:layout_centerHorizontal="true"
-		android:gravity="center"
-		android:orientation="vertical"
-		android:paddingBottom="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="5dp">
 
-		<LinearLayout
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:gravity="center"
-			android:paddingBottom="5dp"
-			android:paddingTop="3dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="3dp">
 
-			<EditText
-				android:layout_height="30dp"
-				android:layout_width="wrap_content"
-				android:ems="10"
-				android:id="@+id/edittext_send"
-				android:layout_weight="20.0"
-				android:textSize="15sp"
-				android:maxHeight="75dp"
-				android:background="@color/white"
-				android:layout_marginLeft="10dp"
-				android:layout_marginRight="5dp"/>
+            <EditText
+                android:id="@+id/edittext_send"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="20.0"
+                android:background="@color/white"
+                android:ems="10"
+                android:labelFor="@+id/edittext_send"
+                android:maxHeight="75dp"
+                android:textSize="15sp" />
 
-			<Button
-				android:layout_height="30dp"
-				android:layout_width="32dp"
-				android:layout_toRightOf="@id/edittext_send"
-				android:id="@+id/button_send"
-				android:layout_marginLeft="5dp"
-				android:background="@drawable/ic_send"
-				android:layout_marginRight="5dp"/>
+            <Button
+                android:id="@+id/button_send"
+                android:layout_width="32dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/ic_send" />
 
-		</LinearLayout>
+        </LinearLayout>
 
-		<LinearLayout
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:orientation="horizontal"
-			android:paddingLeft="10dp"
-			android:paddingRight="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="horizontal"
-				android:layout_weight="1.0"
-				android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-				<Button
-					android:layout_height="27dp"
-					android:layout_width="27dp"
-					android:background="@drawable/ic_comment_account_outline"
-					android:id="@+id/button_chat"/>
+                <Button
+                    android:id="@+id/button_chat"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/ic_comment_account_outline" />
 
-			</LinearLayout>
+            </LinearLayout>
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="horizontal"
-				android:layout_weight="1.0"
-				android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-				<Button
-					android:layout_height="27dp"
-					android:layout_width="27dp"
-					android:background="@drawable/ic_account_remove"
-					android:id="@+id/button_block"/>
+                <Button
+                    android:id="@+id/button_block"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/ic_account_remove" />
 
-			</LinearLayout>
+            </LinearLayout>
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="horizontal"
-				android:layout_weight="1.0"
-				android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-				<Button
-					android:layout_height="27dp"
-					android:layout_width="27dp"
-					android:background="@drawable/ic_server_network"
-					android:id="@+id/button_server"/>
+                <Button
+                    android:id="@+id/button_server"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/ic_server_network" />
 
-			</LinearLayout>
+            </LinearLayout>
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="horizontal"
-				android:layout_weight="1.0"
-				android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-				<Button
-					android:layout_height="27dp"
-					android:layout_width="27dp"
-					android:background="@drawable/ic_information"
-					android:id="@+id/button_info"/>
+                <Button
+                    android:id="@+id/button_info"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/ic_information" />
 
-			</LinearLayout>
+            </LinearLayout>
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="horizontal"
-				android:layout_weight="1.0"
-				android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-				<Button
-					android:layout_height="27dp"
-					android:layout_width="27dp"
-					android:background="@drawable/ic_close_circle_outline"
-					android:id="@+id/button_close"/>
+                <Button
+                    android:id="@+id/button_close"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/ic_close_circle_outline" />
 
-			</LinearLayout>
+            </LinearLayout>
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:orientation="horizontal"
-				android:layout_weight="1.0"
-				android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-				<Button
-					android:layout_height="27dp"
-					android:layout_width="27dp"
-					android:background="@drawable/ic_cog"
-					android:id="@+id/button_settings"/>
+                <Button
+                    android:id="@+id/button_settings"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:background="@drawable/ic_cog" />
 
-			</LinearLayout>
+            </LinearLayout>
 
-		</LinearLayout>
+        </LinearLayout>
 
-	</LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
 

@@ -2,64 +2,63 @@
 <resources>
 
     <string name="app_name">聊</string>
-	<string name="done">确认</string>
-	<string name="submit">提交</string>
-	<string name="cancel">取消</string>
-	<string name="back_launcher">仅返回桌面</string>
-	<string name="attention">注意</string>
-	<string name="settings">设置</string>
-	<string name="username">用户名</string>
-	<string name="port">端口</string>
-	<string name="port_hint">端口 [5000~60000]</string>
-	<string name="password">密码</string>
-	<string name="ip_local">本地IP</string>
-	<string name="ip_server">服务器IP</string>
-	<string name="user_count">用户数量</string>
-	<string name="block_ip">已被屏蔽的IP</string>
-	<string name="user_id">用户ID</string>
-	<string name="author">作者 XFY9326</string>
-	<string name="app_license">开源协议 GNU 3.0</string>
-	<string name="app_url">开源地址 https://github.com/XFY9326/Chat</string>
-	
-	<string name="function_secretchat_title">私聊模式设置</string>
-	<string name="function_block_title">用户屏蔽设置</string>
-	<string name="function_block_add">屏蔽用户</string>
-	<string name="function_block_remove">移除屏蔽</string>
-	<string name="function_server_title">远程服务器重设</string>
-	<string name="function_info_title">服务器信息</string>
-	<string name="function_hint">在这里输入IP地址 (或用户 ID)</string>
-	
-	<string name="msg_join">加入聊天室 用户ID:</string>
-	<string name="msg_block"> 已被屏蔽</string>
-	<string name="msg_unblock"> 不再被屏蔽</string>
-	<string name="msg_welcome">欢迎使用聊</string>
-	<string name="msg_close_app">你真的想要关闭它吗？\n同时你将会离线。</string>
-	<string name="msg_serverip">如果你是服务端，请留空。</string>
-	
-	<string name="warn_server_notstart">服务器还没有启动</string>
-	<string name="warn_secretmode_on">私聊模式开启</string>
-	<string name="warn_secretmode_off">私聊模式关闭</string>
-	<string name="warn_unknown_command">未知命令</string>
-	<string name="warn_online">已上线</string>
-	<string name="warn_offline">已下线</string>
-	
-	<string name="err_wifi_connect">WIFI连接错误！</string>
-	<string name="err_vpn_connect">你必须关闭 VPN！</string>
-	<string name="err_moblie_connect">我们不支持移动网络！</string>
-	<string name="err_ip_format">IP地址格式错误！</string>
-	<string name="err_data_receive">数据接收错误！</string>
-	<string name="err_msg_empty">发送的信息为空！</string>
-	<string name="err_msg_toolong">发送的字数超过了500字！</string>
-	<string name="err_server_ip">服务器IP错误！</string>
-	<string name="err_server_port">服务器端口错误！</string>
-	<string name="err_port_used">这个端口已经被使用了！\n完全关闭本应用也许可以解决这个问题。</string>
-	<string name="err_username">用户名错误！</string>
-	<string name="err_password">密码错误！</string>
-	
-	<string name="settings_global">通用设置</string>
-	<string name="settings_notification">显示通知</string>
-	<string name="settings_notification_describe">在后台运行时接收消息显示为通知</string>
-	<string name="settings_alert">允许信息提示音</string>
-	<string name="settings_alert_describe">当收到不同信息时播放提示音并且振动</string>
-	<string name="settings_about">关于应用</string>
+    <string name="done">确认</string>
+    <string name="submit">提交</string>
+    <string name="cancel">取消</string>
+    <string name="back_launcher">仅返回桌面</string>
+    <string name="attention">注意</string>
+    <string name="settings">设置</string>
+    <string name="username">用户名</string>
+    <string name="port">端口</string>
+    <string name="port_hint">端口 [5000~60000]</string>
+    <string name="password">密码</string>
+    <string name="ip_local">本地IP</string>
+    <string name="ip_server">服务器IP</string>
+    <string name="user_count">用户数量</string>
+    <string name="block_ip">已被屏蔽的IP</string>
+    <string name="user_id">用户ID</string>
+    <string name="author">作者 XFY9326</string>
+    <string name="app_license">开源协议 GNU 3.0</string>
+    <string name="app_url">开源地址 https://github.com/XFY9326/Chat</string>
+
+    <string name="function_secretchat_title">私聊模式设置</string>
+    <string name="function_block_title">用户屏蔽设置</string>
+    <string name="function_block_add">屏蔽用户</string>
+    <string name="function_block_remove">移除屏蔽</string>
+    <string name="function_server_title">远程服务器重设</string>
+    <string name="function_info_title">服务器信息</string>
+    <string name="function_hint">在这里输入IP地址 (或用户 ID)</string>
+
+    <string name="msg_join">加入聊天室 用户ID:</string>
+    <string name="msg_block"> 已被屏蔽</string>
+    <string name="msg_unblock"> 不再被屏蔽</string>
+    <string name="msg_welcome">欢迎使用聊</string>
+    <string name="msg_close_app">你真的想要关闭它吗？\n同时你将会离线。</string>
+    <string name="msg_serverip">如果你是服务端，请留空。</string>
+
+    <string name="warn_server_notstart">服务器还没有启动</string>
+    <string name="warn_secretmode_on">私聊模式开启</string>
+    <string name="warn_secretmode_off">私聊模式关闭</string>
+    <string name="warn_online">已上线</string>
+    <string name="warn_offline">已下线</string>
+
+    <string name="err_wifi_connect">WIFI连接错误！</string>
+    <string name="err_vpn_connect">你必须关闭 VPN！</string>
+    <string name="err_moblie_connect">我们不支持移动网络！</string>
+    <string name="err_ip_format">IP地址格式错误！</string>
+    <string name="err_data_receive">数据接收错误！</string>
+    <string name="err_msg_empty">发送的信息为空！</string>
+    <string name="err_msg_toolong">发送的字数超过了500字！</string>
+    <string name="err_server_ip">服务器IP错误！</string>
+    <string name="err_server_port">服务器端口错误！</string>
+    <string name="err_port_used">这个端口已经被使用了！\n完全关闭本应用也许可以解决这个问题。</string>
+    <string name="err_username">用户名错误！</string>
+    <string name="err_password">密码错误！</string>
+
+    <string name="settings_global">通用设置</string>
+    <string name="settings_notification">显示通知</string>
+    <string name="settings_notification_describe">在后台运行时接收消息显示为通知</string>
+    <string name="settings_alert">允许信息提示音</string>
+    <string name="settings_alert_describe">当收到不同信息时播放提示音并且振动</string>
+    <string name="settings_about">关于应用</string>
 </resources>
